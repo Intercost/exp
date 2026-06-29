@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>EXP Agency Vendor Registry | Supplier Registration</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Welcome to the EXP Agency Vendor Registry. Update your internal supplier directory and catalog to streamline future procurement.">
+<link rel="icon" href="favicon.ico">
+<link rel="stylesheet" href="css/styles.css">
+<script src="js/loader.js" defer></script>
+<style>
+
+  /* ============================== PRELOADER ============================== */
+  html.is-loading{ overflow:hidden; }
+  .preloader{
+    position:fixed; inset:0; z-index:999;
+    background:radial-gradient(circle at 50% 40%, #29292c 0%, var(--exp-ink) 70%);
+    display:flex; align-items:center; justify-content:center;
+    transition:opacity .6s ease, visibility .6s ease;
+  }
+  .preloader.is-hidden{ opacity:0; visibility:hidden; }
+  .preloader-inner{ position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:26px; }
+
+  @keyframes logo-flip {
+    0%   { transform: rotateY(0deg); }
+    100% { transform: rotateY(360deg); }
+  }
+  @keyframes logo-bob {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-8px); }
+  }
+  .preloader-logo-wrap {
+    perspective: 700px; width:96px; height:96px;
+    display:flex; align-items:center; justify-content:center;
+    animation: logo-bob 2.8s ease-in-out infinite;
+  }
+  .preloader-logo-wrap img {
+    width:96px; height:auto;
+    animation: logo-flip 1.6s ease-in-out infinite;
+    filter: drop-shadow(0 4px 18px rgba(237,28,36,.35));
+    will-change: transform;
+  }
+  .preloader-bar{ width:160px; height:3px; border-radius:999px; background:rgba(255,255,255,.12); overflow:hidden; }
+  .preloader-bar::after{
+    content:""; display:block; width:100%; height:100%; border-radius:999px;
+    background:var(--exp-red); transform-origin:left center; transform:scaleX(0);
+    animation:preloader-fill 5s cubic-bezier(.4,0,.2,1) forwards;
+  }
+  @keyframes preloader-fill{
+    0%{ transform:scaleX(0); }
+    70%{ transform:scaleX(.86); }
+    100%{ transform:scaleX(1); }
+  }
+  .preloader-label{ font-family:var(--font-display); font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:#9C9CA1; }
+
+  /* ============================== TOPNAV ============================== */
+  .topnav{
+    background:#ffffff;
+    border-bottom:1px solid rgba(0,0,0,.06);
+    transition:box-shadow .25s ease;
+  }
+  .topnav.is-scrolled{ box-shadow:0 4px 16px rgba(0,0,0,.06); }
+
+  /* ============================== HERO ============================== */
+  .hero{
+    position:relative; overflow:hidden;
+    background:#fff;
+    padding:110px 0 90px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  /* subtle grid-dot background */
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:radial-gradient(circle, rgba(0,0,0,.06) 1px, transparent 1px);
+    background-size:32px 32px;
+    opacity:.5;
+    pointer-events:none;
+  }
+  /* red glow blob */
+  .hero::after{
+    content:"";
+    position:absolute; top:-120px; left:50%; transform:translateX(-50%);
+    width:700px; height:420px;
+    background:radial-gradient(ellipse at 50% 50%, rgba(237,28,36,.08) 0%, transparent 70%);
+    pointer-events:none;
+  }
+  .hero-inner{
+    position:relative; z-index:1; max-width:820px; text-align:center;
+    display:flex; flex-direction:column; align-items:center; gap:32px;
+  }
+  .hero-badge{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:8px 18px; border-radius:20px;
+    background:rgba(237,28,36,.07); border:1px solid rgba(237,28,36,.18);
+    color:var(--exp-red);
+    font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+  }
+  .hero-badge::before{
+    content:""; width:7px; height:7px; border-radius:50%;
+    background:var(--exp-red);
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot{
+    0%,100%{ opacity:1; transform:scale(1); }
+    50%{ opacity:.5; transform:scale(1.4); }
+  }
+  .hero h1{
+    font-size:clamp(38px, 6vw, 68px); line-height:1.12; font-weight:900;
+    color:var(--exp-ink); letter-spacing:-1.5px; margin:0;
+  }
+  /* typewriter cursor */
+  .typewriter-cursor{
+    display:inline-block; width:3px; height:.85em;
+    background:var(--exp-red); margin-left:4px; vertical-align:middle;
+    animation: blink-cursor .75s step-end infinite;
+  }
+  @keyframes blink-cursor{
+    0%,100%{ opacity:1; } 50%{ opacity:0; }
+  }
+  .hero-subtitle{
+    font-size:17px; color:#555; line-height:1.8; max-width:660px; margin:0;
+    font-weight:400;
+  }
+  .hero-ctas{
+    display:flex; gap:14px; justify-content:center; flex-wrap:wrap;
+  }
+
+  /* ============================== GET STARTED ============================== */
+  .get-started{
+    background:#f7f7f8; padding:90px 0;
+  }
+  .section-label{
+    display:inline-block; font-size:11px; font-weight:800; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--exp-red); margin-bottom:14px;
+  }
+  .section-title{
+    font-size:clamp(28px, 4vw, 42px); font-weight:800; color:var(--exp-ink);
+    margin:0 0 16px; letter-spacing:-.7px;
+  }
+  .section-sub{
+    font-size:15px; color:#666; margin:0 0 56px; max-width:520px;
+  }
+  .features-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:24px;
+  }
+  .feature-card{
+    background:#fff;
+    border-radius:16px;
+    border:1px solid rgba(0,0,0,.07);
+    padding:36px 32px;
+    display:flex; flex-direction:column; gap:16px;
+    transition:box-shadow .25s ease, transform .25s ease, border-color .25s ease;
+    position:relative; overflow:hidden;
+  }
+  .feature-card::after{
+    content:"";
+    position:absolute; bottom:0; left:0; right:0; height:3px;
+    background:var(--exp-red);
+    transform:scaleX(0); transform-origin:left;
+    transition:transform .3s ease;
+  }
+  .feature-card:hover{
+    box-shadow:0 16px 40px rgba(0,0,0,.10);
+    transform:translateY(-4px);
+    border-color:rgba(237,28,36,.2);
+  }
+  .feature-card:hover::after{ transform:scaleX(1); }
+
+  .feature-step{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:40px; height:40px; border-radius:10px;
+    background:var(--exp-red); color:#fff;
+    font-size:15px; font-weight:800; flex-shrink:0;
+  }
+  .feature-icon-wrap{
+    width:52px; height:52px; border-radius:12px;
+    background:rgba(237,28,36,.07);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--exp-red);
+  }
+  .feature-card h3{
+    font-size:17px; font-weight:700; color:var(--exp-ink); margin:0;
+  }
+  .feature-card p{
+    font-size:14px; color:#666; line-height:1.65; margin:0;
+  }
+  .feature-card-head{
+    display:flex; align-items:center; gap:14px;
+  }
+
+  /* ============================== CTA BANNER ============================== */
+  .cta-banner{
+    background: linear-gradient(135deg, #1c1c1e 0%, #ED1C24 50%, #ff4d54 100%);
+    padding:90px 0;
+    position:relative; overflow:hidden;
+  }
+  .cta-banner::before{
+    content:"";
+    position:absolute; top:-200px; right:-100px;
+    width:600px; height:600px; border-radius:50%;
+    background:radial-gradient(circle, rgba(255,255,255,.12) 0%, transparent 65%);
+    pointer-events:none;
+  }
+  .cta-banner::after{
+    content:"";
+    position:absolute; bottom:-150px; left:-80px;
+    width:400px; height:400px; border-radius:50%;
+    background:radial-gradient(circle, rgba(255,255,255,.07) 0%, transparent 65%);
+    pointer-events:none;
+  }
+  .cta-inner{
+    position:relative; z-index:1;
+    display:flex; align-items:center; justify-content:space-between; gap:48px;
+    flex-wrap:wrap;
+    background: rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 48px;
+    border: 1px solid rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+  }
+  .cta-text{ flex:1; min-width:280px; }
+  .cta-text h2{
+    font-size:clamp(28px, 4vw, 40px); font-weight:900; color:#fff;
+    letter-spacing:-.8px; margin:0 0 14px;
+  }
+  .cta-text p{
+    font-size:15px; color:rgba(255,255,255,.85); line-height:1.7; margin:0;
+  }
+  .cta-actions{
+    display:flex; flex-direction:column; gap:12px; align-items:flex-start;
+  }
+  .btn-white{
+    display:inline-flex; align-items:center; gap:8px;
+    background:#fff; color:#ED1C24;
+    padding:14px 28px; border-radius:12px;
+    font-weight:700; font-size:14px;
+    transition:background .2s, transform .2s, box-shadow .2s;
+    white-space:nowrap;
+  }
+  .btn-white:hover{ background:#f5f5f5; transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,.15); }
+  .btn-ghost-white{
+    display:inline-flex; align-items:center; gap:8px;
+    background:transparent; color:#fff;
+    padding:14px 28px; border-radius:12px;
+    font-weight:700; font-size:14px;
+    border:1.5px solid rgba(255,255,255,0.4);
+    transition:background .2s, transform .2s;
+    white-space:nowrap;
+  }
+  .btn-ghost-white:hover{ background: rgba(255,255,255,0.1); transform:translateY(-2px); }
+
+  /* ============================== FOOTER ============================== */
+  .site-footer{
+    background:#ED1C24; padding:52px 0; text-align:center;
+  }
+  .site-footer img{
+    height:32px; filter:brightness(0) invert(1);
+    margin-bottom:24px;
+    display:block; margin-left:auto; margin-right:auto;
+  }
+  .site-footer blockquote{
+    font-style:italic; color:rgba(255,255,255,.75); font-size:15px;
+    margin:0 0 6px; line-height:1.7;
+  }
+  .site-footer cite{
+    color:rgba(255,255,255,.55); font-size:13px; font-style:normal;
+  }
+  .site-footer hr{
+    border:none; border-top:1px solid rgba(255,255,255,.2);
+    margin:24px auto; max-width:120px;
+  }
+  .site-footer small{
+    color:rgba(255,255,255,.45); font-size:12px;
+  }
+
+  /* ============================== SCROLL REVEAL ============================== */
+  .reveal{
+    opacity:1; transform:none;
+    transition:opacity .65s cubic-bezier(.22,.61,.36,1), transform .65s cubic-bezier(.22,.61,.36,1);
+  }
+  .js-reveal-ready .reveal{ opacity:0; transform:translateY(28px); }
+  .js-reveal-ready .reveal.is-visible{ opacity:1; transform:none; }
+  .js-reveal-ready .reveal[data-delay="1"]{ transition-delay:.1s; }
+  .js-reveal-ready .reveal[data-delay="2"]{ transition-delay:.2s; }
+  .js-reveal-ready .reveal[data-delay="3"]{ transition-delay:.3s; }
+  .js-reveal-ready .reveal[data-delay="4"]{ transition-delay:.4s; }
+
+  /* ============================== RESPONSIVE ============================== */
+  @media (max-width:768px){
+    .hero{ padding:80px 0 70px; }
+    .get-started, .cta-banner{ padding:64px 0; }
+    .features-grid{ grid-template-columns:1fr; }
+    .cta-inner{ flex-direction:column; align-items:flex-start; padding: 32px; }
+    .cta-actions{ flex-direction:column; align-items:stretch; }
+    .cta-actions .btn-white,
+    .cta-actions .btn-ghost-white{ justify-content:center; }
+  }
+  @media (max-width:480px){
+    .hero{ padding:64px 0 56px; }
+    .hero-ctas{ flex-direction:column; }
+    .hero-ctas .btn{ width:100%; }
+    .feature-card{ padding:26px 22px; }
+  }
+</style>
+</head>
+<body data-active="home">
+
+<!-- PRELOADER -->
+<div class="preloader" id="preloader" aria-hidden="true">
+  <div class="preloader-inner">
+    <div class="preloader-logo-wrap">
+      <img src="assets/exp-logo.png" alt="EXP">
+    </div>
+    <span class="preloader-bar"></span>
+    <span class="preloader-label">Loading vendor registry</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<header class="topnav" id="topnav">
+  <div class="container topnav-inner">
+    <a href="index.html" class="exp-logo" aria-label="EXP home">
+      <img src="assets/exp-logo.png" alt="" width="46" height="27">
+      <span class="logo-word">EXP</span>
+    </a>
+    <button class="btn btn-icon btn-ghost topnav-mobile-toggle" aria-label="Toggle navigation" data-topnav-toggle style="display:inline-flex;">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M3 6h18M3 12h18M3 18h18"/>
+      </svg>
+    </button>
+    <nav class="topnav-links" aria-label="Primary" id="topnavLinks">
+      <a href="supplier/login.html">Supplier Login</a>
+      <a href="supplier/register.html">Register Supplier</a>
+      <a href="admin/login.html">Admin Login</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="container hero-inner">
+    <span class="hero-badge">Supplier &amp; Product Registration</span>
+    <h1 id="hero-title" aria-label="Welcome to the EXP Agency Vendor Registry"></h1>
+    <p class="hero-subtitle">We are updating our internal supplier directory and catalog to streamline future procurement. Please take a few moments to provide your business details and upload high-quality images of the key products or services you supply. Thank you for partnering with us!</p>
+    <div class="hero-ctas">
+      <a href="supplier/register.html" class="btn btn-primary">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg>
+        Register Your Business
+      </a>
+      <a href="supplier/login.html" class="btn btn-ghost">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>
+        Already registered? Log in
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ GET STARTED ═══ -->
+<section class="get-started">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Get Started</span>
+      <h2 class="section-title">Vendor Registration Process</h2>
+      <p class="section-sub">Everything you need to list your business in the EXP Agency supplier directory.</p>
+    </div>
+    <div class="features-grid">
+
+      <div class="feature-card reveal" data-delay="1">
+        <div class="feature-card-head">
+          <div class="feature-icon-wrap">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span class="feature-step">01</span>
+          <h3>Quick Registration</h3>
+        </div>
+        <p>Create your account and fill in your business details in just a few minutes. We keep it simple and efficient.</p>
+      </div>
+
+      <div class="feature-card reveal" data-delay="2">
+        <div class="feature-card-head">
+          <div class="feature-icon-wrap">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span class="feature-step">02</span>
+          <h3>Manage Your Catalog</h3>
+        </div>
+        <p>Upload high-quality images of your key products and services. A well-presented catalog increases your visibility to our procurement team.</p>
+      </div>
+
+      <div class="feature-card reveal" data-delay="3">
+        <div class="feature-card-head">
+          <div class="feature-icon-wrap">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span class="feature-step">03</span>
+          <h3>Supplier Dashboard</h3>
+        </div>
+        <p>Access your personalised dashboard to update your profile, manage products, and keep your business information current at any time.</p>
+      </div>
+
+      <div class="feature-card reveal" data-delay="4">
+        <div class="feature-card-head">
+          <div class="feature-icon-wrap">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span class="feature-step">04</span>
+          <h3>Secure &amp; Professional</h3>
+        </div>
+        <p>Your business information is confidentially stored in our registry, accessible only to authorised EXP Agency procurement staff.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA BANNER ═══ -->
+<section class="cta-banner">
+  <div class="container cta-inner">
+    <div class="cta-text reveal">
+      <h2>Ready to Register Your Business?</h2>
+      <p>Submit your business details and product or service information to the EXP Agency supplier directory today.</p>
+    </div>
+    <div class="cta-actions reveal" data-delay="2">
+      <a href="supplier/register.html" class="btn-white">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg>
+        Register Your Business
+      </a>
+      <a href="supplier/login.html" class="btn-ghost-white">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>
+        Log in to your account
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="container">
+    <blockquote>"Nothing ever becomes real until it is experienced"</blockquote>
+    <cite>John Keats, 1819</cite>
+    <hr>
+    <small>&copy; 2026 Experiential Marketing</small>
+  </div>
+</footer>
+
+<script>
+// ── Topnav scroll shadow ──
+const topnav = document.getElementById('topnav');
+window.addEventListener('scroll', () => {
+  topnav.classList.toggle('is-scrolled', window.scrollY > 10);
+});
+
+// ── Mobile nav toggle ──
+const toggleBtn = document.querySelector('[data-topnav-toggle]');
+const navLinks  = document.getElementById('topnavLinks');
+if (toggleBtn && navLinks) {
+  toggleBtn.addEventListener('click', () => navLinks.classList.toggle('is-open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('is-open')));
+}
+
+// ── Typewriter ──
+(function(){
+  const el   = document.getElementById('hero-title');
+  const text = 'Welcome to the EXP Agency Vendor Registry';
+  const cursor = '<span class="typewriter-cursor" aria-hidden="true"></span>';
+  let i = 0;
+  // start after preloader approx (1.2s delay)
+  setTimeout(function type(){
+    if(i <= text.length){
+      el.innerHTML = text.slice(0, i) + cursor;
+      i++;
+      setTimeout(type, i === 1 ? 60 : 48);
+    }
+  }, 1200);
+})();
+
+// ── Scroll reveal ──
+document.documentElement.classList.add('js-reveal-ready');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      e.target.classList.add('is-visible');
+      revealObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0, rootMargin: '0px 0px -48px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+// ── Preloader ──
+window.addEventListener('load', () => {
+  document.getElementById('preloader').classList.add('is-hidden');
+  document.documentElement.classList.remove('is-loading');
+});
+</script>
+
+</body>
+</html>

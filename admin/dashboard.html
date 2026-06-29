@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Dashboard | Admin Portal | Exp Supplier Network</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.ico">
+<link rel="stylesheet" href="../css/styles.css">
+<script src="../js/loader.js" defer></script>
+</head>
+<body>
+
+<div class="brand-rail" aria-hidden="true"></div>
+<div class="sidebar-scrim"></div>
+
+<aside class="dash-sidebar">
+  <div class="dash-sidebar-head">
+    <a href="../index.html" class="exp-logo">
+      <img src="../assets/exp-logo.png" alt="Exp" width="38" height="22">
+      <span class="logo-word" style="font-size:13px;">SUPPLIER&nbsp;NETWORK</span>
+    </a>
+  </div>
+  <nav class="dash-nav" aria-label="Admin portal navigation">
+    <div class="dash-nav-label">Admin portal</div>
+    <a href="dashboard.html" class="is-active">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+      Dashboard
+    </a>
+    <a href="approvals.html">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+      Approval queue
+      <span class="badge-count" id="navApprovalBadge" style="margin-left:auto; display:none;">0</span>
+    </a>
+    <a href="vendors.html">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 21V7l9-4 9 4v14"/><path d="M9 21V12h6v9"/></svg>
+      Vendor list
+    </a>
+    <a href="supplies.html">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 8 12 3 3 8l9 5 9-5Z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>
+      All supplies
+    </a>
+    <a href="../marketplace/index.html">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 2 6 9H2l7 3-2.84 8.05L12 17l6.84 3.05L16 12l7-3h-4l-3-7Z"/></svg>
+      Marketplace
+    </a>
+  </nav>
+  <div class="dash-sidebar-foot">
+    <a href="../index.html" style="margin-bottom:12px; display:block; text-align:center; color:var(--text-muted); font-size:13px; text-decoration:none;">
+      ← Back to home
+    </a>
+    <button class="btn btn-ghost" style="width:100%; justify-content:flex-start; padding:10px 16px; font-size:14px; color:var(--text-muted);" id="signOutLink">Sign out</button>
+  </div>
+</aside>
+
+<div class="dash-main">
+  <header class="dash-topbar">
+    <div style="display:flex; align-items:center; gap:14px;">
+      <button class="btn btn-icon btn-ghost sidebar-toggle" data-sidebar-toggle aria-label="Open menu">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <h1 class="dash-topbar-title">Dashboard</h1>
+    </div>
+    <button class="btn btn-silver btn-sm" id="syncBtn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 4v5h-5"/></svg>
+      Sync marketplace
+    </button>
+  </header>
+
+  <div class="dash-content">
+    <!-- Stat cards with icons -->
+    <div class="stat-grid">
+      <div class="stat-card" style="display:flex;align-items:flex-start;gap:14px;">
+        <div style="width:44px;height:44px;border-radius:10px;background:#FFF3CD;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="1.8"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>
+        </div>
+        <div><div class="stat-label">Pending approvals</div><div class="stat-value" id="statPending">—</div><div class="stat-foot">Awaiting your review</div></div>
+      </div>
+      <div class="stat-card" style="display:flex;align-items:flex-start;gap:14px;">
+        <div style="width:44px;height:44px;border-radius:10px;background:#D1FAE5;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="1.8"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+        </div>
+        <div><div class="stat-label">Approved vendors</div><div class="stat-value" id="statApproved">—</div><div class="stat-foot">Live in marketplace</div></div>
+      </div>
+      <div class="stat-card" style="display:flex;align-items:flex-start;gap:14px;">
+        <div style="width:44px;height:44px;border-radius:10px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="1.8"><path d="M21 8 12 3 3 8l9 5 9-5Z"/><path d="M3 8v8l9 5 9-5V8"/></svg>
+        </div>
+        <div><div class="stat-label">Live products</div><div class="stat-value" id="statProducts">—</div><div class="stat-foot">Available to staff buyers</div></div>
+      </div>
+      <div class="stat-card" style="display:flex;align-items:flex-start;gap:14px;">
+        <div style="width:44px;height:44px;border-radius:10px;background:#EDE9FE;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="1.8"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 4v5h-5"/></svg>
+        </div>
+        <div><div class="stat-label">Last sync</div><div class="stat-value" id="statSync" style="font-size:16px;">—</div><div class="stat-foot">Marketplace data refresh</div></div>
+      </div>
+    </div>
+
+    <!-- Charts row -->
+    <div class="charts-row" id="chartsRow">
+      <div class="panel charts-row-item">
+        <div class="panel-head"><h2>Vendor status</h2></div>
+        <div class="panel-body" style="display:flex;justify-content:center;align-items:center;min-height:220px;padding:16px;">
+          <canvas id="statusChart"></canvas>
+        </div>
+      </div>
+      <div class="panel charts-row-item">
+        <div class="panel-head"><h2>Products by category</h2></div>
+        <div class="panel-body" style="display:flex;justify-content:center;align-items:center;min-height:220px;padding:16px;" id="prodCatWrap">
+          <span style="color:var(--text-muted);font-size:14px;">No data yet</span>
+          <canvas id="prodCatChart" style="display:none;"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Approval queue preview -->
+    <div class="panel stack-md" style="margin-top:24px;" id="queuePanel">
+      <div class="panel-head">
+        <h2>Approval queue</h2>
+        <a href="approvals.html" class="btn btn-ghost btn-sm">View all</a>
+      </div>
+      <div class="empty-state" id="queueEmpty">
+        <div class="empty-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div>
+        <h3>Queue is clear</h3>
+        <p>All vendor registrations have been reviewed.</p>
+      </div>
+      <div class="panel-body" id="queueBody" style="display:none;padding-top:16px;"></div>
+    </div>
+
+    <!-- Recent registrations -->
+    <div class="panel" style="margin-top:24px;">
+      <div class="panel-head"><h2>Recent registrations</h2><a href="vendors.html" class="btn btn-ghost btn-sm">View all vendors</a></div>
+      <div class="panel-body" id="recentRegistrations" style="padding-top:16px;">
+        <div style="color:var(--text-muted);font-size:14px;padding:20px 0;text-align:center;">Loading...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/app.js"></script>
+<script>
+  document.getElementById("signOutLink").addEventListener("click", (e) => {
+    e.preventDefault();
+    ExpAPI.adminLogout();
+    window.location.href = "login.html";
+  });
+
+  document.getElementById("syncBtn").addEventListener("click", async () => {
+    const res = await ExpAPI.triggerMarketplaceSync();
+    window.expToast(res.ok ? "Marketplace sync triggered." : (res.error || "Couldn't trigger sync."), res.ok ? "success" : "default");
+  });
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    const [summaryRes, queueRes, allVendorsRes, allProductsRes] = await Promise.all([
+      ExpAPI.adminSummary(),
+      ExpAPI.listApprovalQueue(),
+      ExpAPI.listVendors(),
+      ExpAPI.listAllSupplies()
+    ]);
+
+    // ── Stat cards ──
+    if (summaryRes.ok) {
+      const { pendingCount, approvedCount, liveProductCount, lastSync } = summaryRes.data;
+      document.getElementById('statPending').textContent = pendingCount;
+      document.getElementById('statApproved').textContent = approvedCount;
+      document.getElementById('statProducts').textContent = liveProductCount;
+      document.getElementById('statSync').textContent = lastSync ? new Date(lastSync).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '—';
+      const navBadge = document.getElementById("navApprovalBadge");
+      if (pendingCount > 0) { navBadge.textContent = pendingCount; navBadge.style.display = "inline-flex"; }
+    }
+
+    // ── Vendor status pie chart ──
+    const vendors = allVendorsRes.ok ? (allVendorsRes.data || []) : [];
+    const statusCounts = vendors.reduce((acc, v) => { acc[v.status || 'pending'] = (acc[v.status || 'pending'] || 0) + 1; return acc; }, {});
+    new Chart(document.getElementById('statusChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Pending', 'Approved', 'Rejected'],
+        datasets: [{
+          data: [statusCounts['pending'] || 0, statusCounts['approved'] || 0, statusCounts['rejected'] || 0],
+          backgroundColor: ['#F59E0B', '#10B981', '#F43F5E'],
+          borderWidth: 0,
+          hoverOffset: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '62%',
+        plugins: { legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, boxWidth: 10 } } }
+      }
+    });
+
+    // ── Products by category bar chart ──
+    const allProds = allProductsRes.ok ? (allProductsRes.data || []) : [];
+    if (allProds.length > 0) {
+      const catMap = allProds.reduce((acc, p) => { const c = p.category || 'Uncategorized'; acc[c] = (acc[c] || 0) + 1; return acc; }, {});
+      const labels = Object.keys(catMap).sort((a, b) => catMap[b] - catMap[a]).slice(0, 8);
+      const values = labels.map(l => catMap[l]);
+      const palette = ['#ED1C24','#F59E0B','#10B981','#3B82F6','#7C3AED','#F43F5E','#06B6D4','#84CC16'];
+      const pcWrap = document.getElementById('prodCatWrap');
+      pcWrap.innerHTML = '';
+      const cv = document.getElementById('prodCatChart');
+      pcWrap.appendChild(cv);
+      cv.style.display = 'block';
+      new Chart(cv, {
+        type: 'bar',
+        data: { labels, datasets: [{ data: values, backgroundColor: labels.map((_, i) => palette[i % palette.length]), borderRadius: 6, borderSkipped: false }] },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { beginAtZero: true, ticks: { stepSize: 1, maxTicksLimit: 6 }, grid: { color: '#f0f0f0' } },
+            y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+          }
+        }
+      });
+    }
+
+    // ── Approval queue ──
+    if (queueRes.ok && queueRes.data.length > 0) {
+      document.getElementById('queueEmpty').style.display = 'none';
+      document.getElementById('queueBody').style.display = 'block';
+      document.getElementById('queueBody').innerHTML = queueRes.data.slice(0, 3).map(v => `
+        <div class="doc-row" style="cursor:pointer;" onclick="window.location.href='approvals.html'">
+          <div class="doc-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+          <div class="doc-meta">
+            <div class="doc-name">${v.company_name}</div>
+            <div class="doc-sub">${v.contact_name} &middot; ${new Date(v.created_at).toLocaleDateString()}</div>
+          </div>
+          <span class="pill pill-pending">Pending</span>
+        </div>`).join('');
+    }
+
+    // ── Recent registrations (all vendors, newest first) ──
+    const recentWrap = document.getElementById('recentRegistrations');
+    if (vendors.length > 0) {
+      recentWrap.innerHTML = vendors.slice(0, 5).map(v => `
+        <div class="doc-row" style="cursor:pointer;" onclick="window.location.href='vendor-detail.html?id=${v.id}'">
+          <div class="doc-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 21V7l9-4 9 4v14"/><path d="M9 21V12h6v9"/></svg></div>
+          <div class="doc-meta">
+            <div class="doc-name">${v.company_name}</div>
+            <div class="doc-sub">${v.contact_name} &middot; ${new Date(v.created_at).toLocaleDateString()}</div>
+          </div>
+          <span class="pill pill-${v.status === 'approved' ? 'success' : v.status === 'rejected' ? 'danger' : 'pending'}">${v.status?.charAt(0).toUpperCase() + v.status?.slice(1) || 'Pending'}</span>
+        </div>`).join('');
+    } else {
+      recentWrap.innerHTML = '<div style="color:var(--text-muted);font-size:14px;padding:20px 0;text-align:center;">No vendors registered yet.</div>';
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Approval Queue | Admin Portal | Exp Supplier Network</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.ico">
+<link rel="stylesheet" href="../css/styles.css">
+<script src="../js/loader.js" defer></script>
+</head>
+<body>
+
+<div class="brand-rail" aria-hidden="true"></div>
+<div class="sidebar-scrim"></div>
+
+<aside class="dash-sidebar">
+  <div class="dash-sidebar-head">
+    <a href="../index.html" class="exp-logo">
+      <img src="../assets/exp-logo.png" alt="Exp" width="38" height="22">
+      <span class="logo-word" style="font-size:13px;">SUPPLIER&nbsp;NETWORK</span>
+    </a>
+  </div>
+  <nav class="dash-nav" aria-label="Admin portal navigation">
+    <div class="dash-nav-label">Admin portal</div>
+    <a href="dashboard.html">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+      Dashboard
+    </a>
+    <a href="approvals.html" class="is-active">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+      Approval queue
+    </a>
+    <a href="vendors.html">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 21V7l9-4 9 4v14"/><path d="M9 21V12h6v9"/></svg>
+      Vendor list
+    </a>
+    <a href="supplies.html">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 8 12 3 3 8l9 5 9-5Z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>
+      All supplies
+    </a>
+    <a href="../marketplace/index.html">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 2 6 9H2l7 3-2.84 8.05L12 17l6.84 3.05L16 12l7-3h-4l-3-7Z"/></svg>
+      Marketplace
+    </a>
+  </nav>
+  <div class="dash-sidebar-foot">
+    <a href="../index.html" style="margin-bottom:12px; display:block; text-align:center; color:var(--text-muted); font-size:13px; text-decoration:none;">
+      ← Back to home
+    </a>
+    <button class="btn btn-ghost" style="width:100%; justify-content:flex-start; padding:10px 16px; font-size:14px; color:var(--text-muted);" id="signOutLink">Sign out</button>
+  </div>
+</aside>
+
+<div class="dash-main">
+  <header class="dash-topbar">
+    <div style="display:flex; align-items:center; gap:14px;">
+      <button class="btn btn-icon btn-ghost sidebar-toggle" data-sidebar-toggle aria-label="Open menu">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <h1 class="dash-topbar-title">Approval queue</h1>
+    </div>
+  </header>
+
+  <div class="dash-content">
+    <div class="panel" style="margin-bottom:20px;">
+      <div class="panel-pad">
+        <div class="filter-bar" style="display:flex; gap:14px; flex-wrap:wrap; align-items:center;">
+          <input class="input" placeholder="Search by company name…" style="max-width:260px;" id="queueSearch">
+          <div class="category-chip-row" style="margin-left:auto;">
+            <button class="category-chip is-active" data-filter="all">All</button>
+            <button class="category-chip" data-filter="docs-missing">Docs missing</button>
+            <button class="category-chip" data-filter="new">New today</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="queueWrap">
+      <div class="empty-state" style="padding:72px 24px;">
+        <div class="empty-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+        </div>
+        <h3>The queue is empty</h3>
+        <p>As soon as a supplier registers or updates their compliance documents, their record appears here for review. Connect the backend to start receiving submissions.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Review modal — shown once a real row exists and is clicked -->
+<div class="modal-scrim" id="reviewModal">
+  <div class="modal-box" style="max-width:560px;">
+    <div class="modal-head">
+      <h3>Review vendor</h3>
+      <button class="btn btn-icon btn-ghost" data-close-modal aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body stack-md">
+      <dl class="kv-list">
+        <dt>Company</dt><dd id="rvCompany">—</dd>
+        <dt>Contact</dt><dd id="rvContact">—</dd>
+        <dt>Categories</dt><dd id="rvCategories">—</dd>
+        <dt>Submitted</dt><dd id="rvSubmitted">—</dd>
+      </dl>
+      <div>
+        <p class="eyebrow" style="margin-bottom:10px;">Documents</p>
+        <div id="rvDocs" class="stack-xs muted" style="font-size:13px;">No documents on file yet.</div>
+      </div>
+      <div class="field">
+        <label for="rvNote">Note <span class="muted" style="font-weight:400;">(shared with the supplier on rejection)</span></label>
+        <textarea class="input" id="rvNote" placeholder="Optional note"></textarea>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-danger-ghost" id="rvReject">Reject</button>
+      <button class="btn btn-primary" id="rvApprove">Approve vendor</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/app.js"></script>
+<script>
+  document.getElementById("signOutLink").addEventListener("click", (e) => {
+    e.preventDefault();
+    ExpAPI.logout();
+    window.location.href = "login.html";
+  });
+
+  let currentVendorId = null;
+  let allVendors = [];
+
+  // Load approval queue on page load
+  document.addEventListener("DOMContentLoaded", async () => {
+    await loadQueue();
+    
+    // Category filter listeners
+    document.querySelectorAll(".category-chip").forEach(chip => {
+      chip.addEventListener("click", () => {
+        document.querySelectorAll(".category-chip").forEach(c => c.classList.remove("is-active"));
+        chip.classList.add("is-active");
+        renderQueue(allVendors, chip.dataset.filter);
+      });
+    });
+  });
+
+  async function loadQueue() {
+    const res = await ExpAPI.listApprovalQueue();
+    if (res.ok) {
+      allVendors = res.data || [];
+      renderQueue(allVendors, "all");
+    }
+  }
+
+  function renderQueue(vendors, filter) {
+    const queueWrap = document.getElementById("queueWrap");
+    let filteredVendors = vendors;
+    
+    if (filter === "new") {
+      const today = new Date().toDateString();
+      filteredVendors = vendors.filter(v => new Date(v.created_at).toDateString() === today);
+    } else if (filter === "docs-missing") {
+      // For now, just show all (we can add docs check later)
+      filteredVendors = vendors;
+    }
+
+    if (filteredVendors.length === 0) {
+      queueWrap.innerHTML = `
+        <div class="empty-state" style="padding:72px 24px;">
+          <div class="empty-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+          </div>
+          <h3>The queue is empty</h3>
+          <p>As soon as a supplier registers or updates their compliance documents, their record appears here for review.</p>
+        </div>
+      `;
+      return;
+    }
+
+    queueWrap.innerHTML = `
+      <div class="panel-body" style="padding-top:0;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Company</th>
+              <th>Contact</th>
+              <th>Submitted</th>
+              <th style="width:120px;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            ${filteredVendors.map(v => `
+              <tr>
+                <td>
+                  <div class="cell-name">
+                    <div class="avatar">${v.company_name.charAt(0).toUpperCase()}</div>
+                    <div>
+                      <div style="font-weight:700;">${v.company_name}</div>
+                      <div class="muted" style="font-size:12px;">${v.email}</div>
+                    </div>
+                  </div>
+                </td>
+                <td>${v.contact_name}</td>
+                <td>${new Date(v.created_at).toLocaleDateString()}</td>
+                <td style="text-align:right;">
+                  <button class="btn btn-ghost btn-sm" data-review="${v.id}">Review</button>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+
+    // Add click listeners to review buttons
+    document.querySelectorAll("[data-review]").forEach(btn => {
+      btn.addEventListener("click", () => openReviewModal(btn.dataset.review));
+    });
+  }
+
+  async function openReviewModal(vendorId) {
+    currentVendorId = vendorId;
+    const modal = document.getElementById("reviewModal");
+    modal.classList.add("is-open");
+
+    // Load vendor details
+    const res = await ExpAPI.getVendor(vendorId);
+    if (res.ok) {
+      const vendor = res.data;
+      document.getElementById("rvCompany").textContent = vendor.company_name;
+      document.getElementById("rvContact").textContent = `${vendor.contact_name} • ${vendor.email}`;
+      document.getElementById("rvCategories").textContent = vendor.category ? vendor.category : "None selected";
+      document.getElementById("rvSubmitted").textContent = new Date(vendor.created_at).toLocaleString();
+      
+      // Load documents (if any)
+      if (vendor.products && vendor.products.length > 0) {
+        document.getElementById("rvDocs").innerHTML = vendor.products.map(p => `<div>• ${p.name}</div>`).join("");
+      } else {
+        document.getElementById("rvDocs").innerHTML = "<div>No documents on file yet.</div>";
+      }
+    }
+  }
+
+  // Approve button listener
+  document.getElementById("rvApprove").addEventListener("click", async () => {
+    if (!currentVendorId) return;
+    const note = document.getElementById("rvNote").value;
+    const res = await ExpAPI.approveVendor(currentVendorId, note);
+    if (res.ok) {
+      window.expToast("Vendor approved!", "success");
+      document.getElementById("reviewModal").classList.remove("is-open");
+      await loadQueue();
+    } else {
+      window.expToast(res.error || "Couldn't approve vendor.", "error");
+    }
+  });
+
+  // Reject button listener
+  document.getElementById("rvReject").addEventListener("click", async () => {
+    if (!currentVendorId) return;
+    const reason = document.getElementById("rvNote").value;
+    if (!reason) {
+      window.expToast("Please provide a rejection reason.", "error");
+      return;
+    }
+    const res = await ExpAPI.rejectVendor(currentVendorId, reason);
+    if (res.ok) {
+      window.expToast("Vendor rejected.", "success");
+      document.getElementById("reviewModal").classList.remove("is-open");
+      await loadQueue();
+    } else {
+      window.expToast(res.error || "Couldn't reject vendor.", "error");
+    }
+  });
+</script>
+</body>
+</html>

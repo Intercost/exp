@@ -1,0 +1,18 @@
+<svg viewBox="0 0 220 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Exp">
+  <defs>
+    <linearGradient id="ovalShade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FF4E45"/>
+      <stop offset=".45" stop-color="#ED1C24"/>
+      <stop offset="1" stop-color="#C8141B"/>
+    </linearGradient>
+    <radialGradient id="highlight" cx="0.32" cy="0.18" r="0.5">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".85"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <ellipse cx="110" cy="65" rx="108" ry="62" fill="url(#ovalShade)"/>
+  <ellipse cx="78" cy="26" rx="46" ry="10" fill="url(#highlight)"/>
+  <text x="110" y="90" text-anchor="middle"
+        font-family="'Brush Script MT','Segoe Script','Comic Sans MS',cursive"
+        font-size="78" fill="#ffffff" font-style="italic">exp</text>
+</svg>

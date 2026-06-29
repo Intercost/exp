@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>My Products | Supplier Portal | Exp Supplier Network</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.ico">
+<link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+
+<div class="brand-rail" aria-hidden="true"></div>
+<div class="sidebar-scrim"></div>
+
+<aside class="dash-sidebar">
+  <div class="dash-sidebar-head">
+    <a href="../index.html" class="exp-logo">
+      <img src="../assets/exp-logo.png" alt="Exp" width="38" height="22">
+      <span class="logo-word" style="font-size:13px;">SUPPLIER&nbsp;NETWORK</span>
+    </a>
+  </div>
+  <nav class="dash-nav" aria-label="Supplier portal navigation">
+    <div class="dash-nav-label">Supplier portal</div>
+    <a href="dashboard.html">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+      Dashboard
+    </a>
+    <a href="products.html" class="is-active">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 8 12 3 3 8l9 5 9-5Z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>
+      My products
+    </a>
+    <a href="categories.html">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+      My categories
+    </a>
+    <div class="dash-nav-label">Account</div>
+    <a href="profile.html">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+      Company profile
+    </a>
+  </nav>
+  <div class="dash-sidebar-foot">
+    <a href="../index.html" style="margin-bottom:12px; display:block; text-align:center; color:var(--text-muted); font-size:13px; text-decoration:none;">
+      ← Back to home
+    </a>
+    <button class="btn btn-ghost" style="width:100%; justify-content:flex-start; padding:10px 16px; font-size:14px; color:var(--text-muted);" id="signOutLink">Sign out</button>
+  </div>
+</aside>
+
+<div class="dash-main">
+  <header class="dash-topbar">
+    <div style="display:flex; align-items:center; gap:14px;">
+      <button class="btn btn-icon btn-ghost sidebar-toggle" data-sidebar-toggle aria-label="Open menu">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <h1 class="dash-topbar-title">My products</h1>
+    </div>
+    <button class="btn btn-primary btn-sm" data-open-modal="productModal">+ Add product</button>
+  </header>
+
+  <div class="dash-content">
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Catalogue</h2>
+        <input class="input" placeholder="Search your products…" style="max-width:240px;" id="productSearch">
+      </div>
+      <div id="productListWrap">
+        <div class="empty-state">
+          <div class="empty-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 8 12 3 3 8l9 5 9-5Z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>
+          </div>
+          <h3>No products listed yet</h3>
+          <p>Once you add a product here, it's saved to your catalogue immediately and queued to appear in the staff marketplace as soon as your account is approved.</p>
+          <button class="btn btn-primary" data-open-modal="productModal">Add your first product</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Product action modal (click row → edit or delete) -->
+<div class="modal-scrim" id="productActionModal">
+  <div class="modal-box" style="max-width:380px;">
+    <div class="modal-head">
+      <h3 id="actionModalProductName" style="font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px;">Product</h3>
+      <button class="btn btn-icon btn-ghost" data-close-modal="productActionModal" aria-label="Close">&#x2715;</button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:10px;padding:20px 24px;">
+      <button class="btn btn-silver" id="actionEditBtn" style="justify-content:flex-start;gap:12px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5Z"/></svg>
+        Edit product
+      </button>
+      <button class="btn" id="actionDeleteBtn" style="justify-content:flex-start;gap:12px;background:#FFF1F2;color:#E11D48;border:1px solid #FECDD3;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+        Delete product
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Add/Edit product modal -->
+<div class="modal-scrim" id="productModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="productModalTitle">Add a product</h3>
+      <button class="btn btn-icon btn-ghost" data-close-modal aria-label="Close">&#x2715;</button>
+    </div>
+    <form id="productForm">
+      <div class="modal-body stack-sm">
+        <div class="field">
+          <label for="prodName">Product / service name</label>
+          <input class="input" id="prodName" name="prodName" required placeholder="e.g. Marquee tent 10x10m">
+          <p class="error-msg">Required.</p>
+        </div>
+        <div class="input-group-row">
+          <div class="field">
+            <label for="prodCategory">Category</label>
+            <select class="input" id="prodCategory" name="prodCategory" required onchange="updateSubcategories()">
+              <option value="">Select a category…</option>
+              <option value="Event Production & Infrastructure">Event Production & Infrastructure</option>
+              <option value="Branding, Print & Merchandising">Branding, Print & Merchandising</option>
+              <option value="Creative Production & Media">Creative Production & Media</option>
+              <option value="Logistics & Field Operations">Logistics & Field Operations</option>
+              <option value="Hospitality & Catering">Hospitality & Catering</option>
+              <option value="Other">Other</option>
+            </select>
+            <p class="error-msg">Choose a category.</p>
+          </div>
+          <div class="field">
+            <label for="prodSubcategory">Subcategory</label>
+            <select class="input" id="prodSubcategory" name="prodSubcategory">
+              <option value="">Select subcategory…</option>
+            </select>
+          </div>
+        </div>
+        <div class="field" id="otherCategoryField" style="display:none;">
+          <label for="prodOtherCategory">Specify other category</label>
+          <input class="input" id="prodOtherCategory" name="prodOtherCategory" placeholder="e.g. Consulting, Training, IT Services">
+        </div>
+        <div class="field">
+          <label for="prodUnit">Unit</label>
+          <select class="input" id="prodUnit" name="prodUnit">
+            <option>Per item</option>
+            <option>Per day</option>
+            <option>Per person</option>
+            <option>Per event</option>
+            <option>Per hour</option>
+          </select>
+        </div>
+        <div class="input-group-row">
+          <div class="field">
+            <label for="prodPricePerItem">Price per item (Ksh) <span class="muted" style="font-weight:400;">optional</span></label>
+            <input class="input" type="number" min="0" step="0.01" id="prodPricePerItem" name="prodPricePerItem" placeholder="0.00">
+          </div>
+          <div class="field">
+            <label for="prodQuantityInStock">Quantity in stock</label>
+            <input class="input" type="number" min="0" step="1" id="prodQuantityInStock" name="prodQuantityInStock" placeholder="0">
+          </div>
+        </div>
+        <div class="field">
+          <label for="prodTotalCost">Total cost (Ksh) <span class="muted" style="font-weight:400;">calculated</span></label>
+          <input class="input" type="number" min="0" step="0.01" id="prodTotalCost" name="prodTotalCost" placeholder="0.00" readonly style="background: var(--exp-silver-pale);">
+        </div>
+        <div class="field">
+          <label for="prodDesc">Description</label>
+          <textarea class="input" id="prodDesc" name="prodDesc" required placeholder="What's included, lead time, minimum order…"></textarea>
+          <p class="error-msg">Add a short description.</p>
+        </div>
+        <div class="field">
+          <label>Photo <span class="muted" style="font-weight:400;">optional</span></label>
+          <div class="dropzone" style="padding:18px;" id="prodPhotoDropzone">
+            <input type="file" accept="image/*" class="visually-hidden" id="prodPhoto">
+            <div id="prodPhotoPreview" style="display: none;">
+              <img id="prodPhotoPreviewImg" style="max-width: 200px; max-height: 200px; border-radius: 8px;">
+            </div>
+            <p id="prodPhotoPlaceholder" style="font-size:12.5px;" class="muted">Drop an image or click to browse</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn btn-ghost" data-close-modal>Cancel</button>
+        <button type="submit" class="btn btn-primary" id="productFormSubmit">Save product</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/app.js"></script>
+<script>
+  let _editingProductId = null; // null = create, string = update
+  let _currentActionProduct = null; // product object for action modal
+
+  // ── Subcategory data ──
+  const subcategories = {
+    'Event Production & Infrastructure': ['Venue','Sound & Audio','Lighting','Stage','Planning','Decoration','Catering','Transport','Security'],
+    'Branding, Print & Merchandising': ['Logo Design','Brand Identity','Packaging','Print Materials','Merchandise','Signage','Labels','Branded Items'],
+    'Creative Production & Media': ['Video Production','Photography','Animation','Graphic Design','Content Creation','Copywriting','Editing','Broadcasting'],
+    'Logistics & Field Operations': ['Transport','Warehousing','Distribution','Courier','Rental','Storage','Shipping','Tracking'],
+    'Hospitality & Catering': ['Accommodation','Food & Beverage','Bar Services','Housekeeping','Concierge','Cleaning','Maintenance','Staff'],
+    'Other': ['Other']
+  };
+
+  window.updateSubcategories = function() {
+    const cat = document.getElementById('prodCategory').value;
+    const sub = document.getElementById('prodSubcategory');
+    const other = document.getElementById('otherCategoryField');
+    sub.innerHTML = '<option value="">Select subcategory…</option>';
+    other.style.display = cat === 'Other' ? 'block' : 'none';
+    if (cat !== 'Other') document.getElementById('prodOtherCategory').value = '';
+    (subcategories[cat] || []).forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = s; sub.appendChild(o); });
+  };
+
+  // Function to calculate total cost
+  window.calculateTotalCost = function() {
+    const pricePerItem = parseFloat(document.getElementById('prodPricePerItem').value) || 0;
+    const quantity = parseInt(document.getElementById('prodQuantityInStock').value) || 0;
+    const totalCostInput = document.getElementById('prodTotalCost');
+    if (quantity > 0 && pricePerItem > 0) {
+      totalCostInput.value = (pricePerItem * quantity).toFixed(2);
+    } else {
+      totalCostInput.value = '';
+    }
+  };
+
+
+
+  // ── Open action modal when a product row is clicked ──
+  function openActionModal(product) {
+    _currentActionProduct = product;
+    document.getElementById('actionModalProductName').textContent = product.name;
+    document.getElementById('productActionModal').classList.add('is-open');
+  }
+
+  // ── Action modal: edit ──
+  document.getElementById('actionEditBtn').addEventListener('click', () => {
+    if (!_currentActionProduct) return;
+    document.getElementById('productActionModal').classList.remove('is-open');
+    openEditModal(_currentActionProduct);
+  });
+
+  // ── Action modal: delete ──
+  document.getElementById('actionDeleteBtn').addEventListener('click', async () => {
+    if (!_currentActionProduct) return;
+    document.getElementById('productActionModal').classList.remove('is-open');
+    if (!confirm(`Delete "${_currentActionProduct.name}"? This cannot be undone.`)) return;
+    const res = await ExpAPI.deleteProduct(_currentActionProduct.id);
+    if (res.ok) { window.expToast('Product deleted.', 'success'); await loadProducts(); }
+    else window.expToast(res.error || 'Error deleting product.', 'error');
+  });
+
+  // ── Close action modal ──
+  document.querySelector('[data-close-modal="productActionModal"]').addEventListener('click', () => {
+    document.getElementById('productActionModal').classList.remove('is-open');
+  });
+
+  // ── Pre-fill form for editing ──
+  function openEditModal(product) {
+    _editingProductId = product.id;
+    document.getElementById('productModalTitle').textContent = 'Edit product';
+    document.getElementById('productFormSubmit').textContent = 'Update product';
+    const form = document.getElementById('productForm');
+    form.prodName.value = product.name || '';
+    form.prodCategory.value = product.category || '';
+    updateSubcategories();
+    form.prodSubcategory.value = product.subcategory || '';
+    form.prodUnit.value = product.unit || 'Per item';
+    form.prodPricePerItem.value = product.price_per_item || '';
+    form.prodQuantityInStock.value = product.quantity_in_stock || 0;
+    // Calculate total cost
+    calculateTotalCost();
+    form.prodDesc.value = product.description || '';
+    // Show existing photo if any
+    if (product.photo_url) {
+      document.getElementById('prodPhotoPreviewImg').src = product.photo_url;
+      document.getElementById('prodPhotoPreview').style.display = 'block';
+      document.getElementById('prodPhotoPlaceholder').style.display = 'none';
+    }
+    document.getElementById('productModal').classList.add('is-open');
+  }
+
+  function resetProductForm() {
+    _editingProductId = null;
+    document.getElementById('productModalTitle').textContent = 'Add a product';
+    document.getElementById('productFormSubmit').textContent = 'Save product';
+    document.getElementById('productForm').reset();
+    document.getElementById('prodPhotoPreview').style.display = 'none';
+    document.getElementById('prodPhotoPlaceholder').style.display = 'block';
+  }
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    await ExpAPI.refreshCurrentUser();
+    const currentUser = ExpAPI.getCurrentUser();
+    if (!currentUser || currentUser.type !== 'supplier') { window.location.href = 'login.html'; return; }
+
+    document.getElementById('signOutLink').addEventListener('click', (e) => { e.preventDefault(); ExpAPI.logout(); window.location.href = 'login.html'; });
+
+    // Auto-select user's registered category
+    const categorySelect = document.getElementById('prodCategory');
+    if (currentUser.category) {
+      let found = [...categorySelect.options].some(o => { if (o.value === currentUser.category) { o.selected = true; return true; } });
+      if (!found) categorySelect.value = 'Other';
+    }
+
+    // Image preview
+    document.getElementById('prodPhoto').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = ev => { document.getElementById('prodPhotoPreviewImg').src = ev.target.result; document.getElementById('prodPhotoPreview').style.display = 'block'; document.getElementById('prodPhotoPlaceholder').style.display = 'none'; };
+        reader.readAsDataURL(file);
+      } else { document.getElementById('prodPhotoPreview').style.display = 'none'; document.getElementById('prodPhotoPlaceholder').style.display = 'block'; }
+    });
+
+    // Calculate total cost when price or quantity changes
+    document.getElementById('prodPricePerItem').addEventListener('input', calculateTotalCost);
+    document.getElementById('prodQuantityInStock').addEventListener('input', calculateTotalCost);
+
+    // Reset form when "Add product" button opens modal
+    document.querySelectorAll('[data-open-modal="productModal"]').forEach(btn => btn.addEventListener('click', resetProductForm));
+    // Reset on close
+    document.querySelectorAll('[data-close-modal]').forEach(btn => {
+      if (btn.getAttribute('data-close-modal') !== 'productActionModal') btn.addEventListener('click', resetProductForm);
+    });
+
+    await loadProducts();
+  });
+
+  async function loadProducts() {
+    const wrap = document.getElementById('productListWrap');
+    const res = await ExpAPI.listMyProducts();
+    if (!res.ok) { wrap.innerHTML = `<div class="empty-state"><h3>Error loading products</h3><p class="muted">${res.error}</p></div>`; return; }
+    const products = res.data;
+    if (!products.length) {
+      wrap.innerHTML = `<div class="empty-state"><div class="empty-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 8 12 3 3 8l9 5 9-5Z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg></div><h3>No products listed yet</h3><p>Add a product to start building your catalogue.</p><button class="btn btn-primary" data-open-modal="productModal" onclick="resetProductForm()">Add your first product</button></div>`;
+      return;
+    }
+    wrap.innerHTML = `<table class="data-table"><thead><tr><th style="width:80px;">Photo</th><th>Product</th><th>Category</th><th>Subcategory</th><th>Price</th><th>Qty</th><th>Total</th></tr></thead><tbody id="productTableBody"></tbody></table>`;
+    const tbody = document.getElementById('productTableBody');
+    products.forEach(p => {
+      const tr = document.createElement('tr');
+      tr.style.cursor = 'pointer';
+      tr.title = 'Click to edit or delete';
+      tr.innerHTML = `
+        <td>${p.photo_url ? `<img src="${p.photo_url}" alt="${p.name}" style="width:72px;height:72px;object-fit:cover;border-radius:8px;">` : `<div style="width:72px;height:72px;background:#f5f5f5;border-radius:8px;display:flex;align-items:center;justify-content:center;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><path d="M21 8 12 3 3 8l9 5 9-5Z"/><path d="M3 8v8l9 5 9-5V8"/></svg></div>`}</td>
+        <td><div style="font-weight:500;">${p.name}</div><div class="muted" style="font-size:12.5px;margin-top:2px;">${p.description || ''}</div></td>
+        <td>${p.category || '—'}</td>
+        <td>${p.subcategory || '—'}</td>
+        <td>${p.price_per_item ? 'Ksh ' + Number(p.price_per_item).toLocaleString() : '—'}</td>
+        <td>${p.quantity_in_stock || '—'}</td>
+        <td>${p.total_cost ? 'Ksh ' + Number(p.total_cost).toLocaleString() : '—'}</td>`;
+      tr.addEventListener('click', () => openActionModal(p));
+      tbody.appendChild(tr);
+    });
+  }
+
+  document.getElementById('productForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    if (!window.expValidate(form)) return;
+    const btn = document.getElementById('productFormSubmit');
+    btn.disabled = true; btn.textContent = _editingProductId ? 'Updating…' : 'Saving…';
+
+    let photoUrl = null;
+    const photoFile = form.prodPhoto.files[0];
+    if (photoFile) {
+      const uploadRes = await ExpAPI.uploadProductPhoto(photoFile);
+      photoUrl = uploadRes.ok ? uploadRes.data : null;
+      if (!uploadRes.ok) window.expToast("Photo couldn't be uploaded, saving without it.", 'default');
+    } else if (_editingProductId) {
+      // Keep existing photo
+      photoUrl = document.getElementById('prodPhotoPreviewImg').src || null;
+    }
+
+    let finalCategory = form.prodCategory.value;
+    if (finalCategory === 'Other' && form.prodOtherCategory?.value?.trim()) finalCategory = form.prodOtherCategory.value.trim();
+
+    const payload = {
+      name: form.prodName.value.trim(),
+      category: finalCategory,
+      subcategory: form.prodSubcategory.value || finalCategory,
+      unit: form.prodUnit.value,
+      price_per_item: form.prodPricePerItem.value ? Number(form.prodPricePerItem.value) : null,
+      quantity_in_stock: form.prodQuantityInStock.value ? parseInt(form.prodQuantityInStock.value) : 0,
+      total_cost: form.prodTotalCost.value ? Number(form.prodTotalCost.value) : null,
+      description: form.prodDesc.value.trim(),
+      photo_url: photoUrl
+    };
+
+    const res = _editingProductId
+      ? await ExpAPI.updateProduct(_editingProductId, payload)
+      : await ExpAPI.createProduct(payload);
+
+    if (res.ok) {
+      window.expToast(_editingProductId ? 'Product updated.' : 'Product saved.', 'success');
+      document.getElementById('productModal').classList.remove('is-open');
+      resetProductForm();
+      await loadProducts();
+    } else {
+      window.expToast(res.error || "Couldn't save the product.", 'error');
+    }
+    btn.disabled = false;
+    btn.textContent = _editingProductId ? 'Update product' : 'Save product';
+  });
+</script>
+</body>
+</html>

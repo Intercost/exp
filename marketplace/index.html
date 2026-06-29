@@ -1,0 +1,645 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Supplier Marketplace | EXP Agency</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.ico">
+<link rel="stylesheet" href="../css/styles.css">
+<script src="../js/loader.js" defer></script>
+<style>
+  /* ============================== MARKETPLACE HEADER ============================== */
+  .marketplace-header {
+    background: #ffffff;
+    border-bottom: 1px solid rgba(0,0,0,.06);
+    padding: 60px 0 50px;
+  }
+  .marketplace-header-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+    text-align: center;
+  }
+  .marketplace-header h1 {
+    font-size: 52px;
+    font-weight: 800;
+    color: var(--exp-ink);
+    letter-spacing: -1px;
+    margin: 0;
+    max-width: 700px;
+    line-height: 1.2;
+  }
+  .marketplace-header p {
+    font-size: 16px;
+    color: #666;
+    margin: 0;
+    max-width: 520px;
+    line-height: 1.6;
+  }
+
+  /* ============================== SEARCH BOX ============================== */
+  .search-container {
+    display: flex;
+    gap: 12px;
+    align-items: stretch;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .search-container input {
+    flex: 1;
+    padding: 14px 18px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 15px;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .search-container input:focus {
+    outline: none;
+    border-color: var(--exp-red);
+    box-shadow: 0 0 0 3px rgba(237,28,36,.1);
+  }
+  .search-container .btn {
+    min-width: 120px;
+  }
+
+  @media (max-width:768px) {
+    .marketplace-header {
+      padding: 40px 0 36px;
+    }
+    .marketplace-header h1 {
+      font-size: 36px;
+    }
+    .marketplace-header p {
+      font-size: 14px;
+    }
+    .search-container {
+      flex-direction: column;
+    }
+    .search-container .btn {
+      width: 100%;
+    }
+  }
+
+  /* ============================== FILTERS ============================== */
+  .filters-bar {
+    background: #fafbfc;
+    border-bottom: 1px solid rgba(0,0,0,.06);
+    padding: 24px 0;
+    margin-bottom: 40px;
+  }
+  .filters-inner {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .filters-inner label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--exp-ink);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+  .filters-inner select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+    transition: border-color .2s;
+  }
+  .filters-inner select:focus {
+    outline: none;
+    border-color: var(--exp-red);
+  }
+
+  .category-chips {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .category-chip {
+    padding: 8px 16px;
+    border: 1px solid rgba(237,28,36,.2);
+    background: white;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--exp-ink);
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .category-chip:hover {
+    border-color: var(--exp-red);
+    color: var(--exp-red);
+  }
+  .category-chip.is-active {
+    background: var(--exp-red);
+    color: white;
+    border-color: var(--exp-red);
+  }
+
+  /* ============================== SUPPLIER GRID ============================== */
+  .suppliers-section {
+    padding: 0 0 80px;
+  }
+  .supplier-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 32px;
+  }
+  .supplier-card {
+    display: block;
+    border: 1px solid rgba(0,0,0,.08);
+    border-radius: 14px;
+    padding: 24px;
+    background: white;
+    text-decoration: none;
+    color: inherit;
+    transition: all .3s cubic-bezier(.22,.61,.36,1);
+    position: relative;
+  }
+  .supplier-card:hover {
+    border-color: var(--exp-red);
+    box-shadow: 0 12px 32px rgba(237,28,36,.12);
+    transform: translateY(-4px);
+  }
+
+  .supplier-card-header {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 18px;
+  }
+  .supplier-card-logo {
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: linear-gradient(130deg, var(--exp-red) 0%, #ff4d54 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+  }
+  .supplier-card-header h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--exp-ink);
+    margin: 0;
+    line-height: 1.3;
+  }
+  .supplier-card-header p {
+    font-size: 13px;
+    color: #999;
+    margin: 4px 0 0;
+  }
+
+  .supplier-card-body {
+    margin-bottom: 18px;
+  }
+  .supplier-card-body p {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+    margin: 0 0 16px;
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+  }
+  .product-thumbnail {
+    background: #f8f8f8;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #eee;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .product-thumbnail:hover {
+    border-color: var(--exp-red);
+    box-shadow: 0 4px 12px rgba(237,28,36,.12);
+  }
+  .product-thumbnail-img {
+    width: 100%;
+    aspect-ratio: 1;
+    background: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .product-thumbnail-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .product-thumbnail-info {
+    padding: 8px 10px;
+    border-top: 1px solid #f0f0f0;
+  }
+  .product-thumbnail-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .product-thumbnail-cat {
+    font-size: 11px;
+    color: #aaa;
+    margin: 2px 0 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .supplier-card-footer {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding-top: 16px;
+    border-top: 1px solid rgba(0,0,0,.06);
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .pill-silver {
+    background: rgba(0,0,0,.04);
+    color: var(--exp-ink);
+  }
+  .pill-exp {
+    background: rgba(237,28,36,.08);
+    color: var(--exp-red);
+  }
+
+  /* ============================== EMPTY STATE ============================== */
+  .empty-state {
+    padding: 80px 24px;
+    text-align: center;
+  }
+  .empty-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(237,28,36,.08);
+    border-radius: 12px;
+  }
+  .empty-icon svg {
+    width: 32px;
+    height: 32px;
+    color: var(--exp-red);
+  }
+  .empty-state h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--exp-ink);
+    margin: 0 0 8px;
+  }
+  .empty-state p {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ============================== MODAL ============================== */
+  .image-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.88);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    animation: fadeIn .2s;
+  }
+  .image-modal.is-open {
+    display: flex;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .image-modal-content {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .image-modal img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 12px;
+  }
+  .image-modal-close {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity .2s;
+  }
+  .image-modal-close:hover {
+    opacity: .7;
+  }
+  .image-modal-close svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  @media (max-width: 640px) {
+    .supplier-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    .filters-bar {
+      margin-bottom: 30px;
+    }
+  }
+</style>
+</head>
+<body data-active="marketplace">
+
+<header class="topnav" id="topnav">
+  <div class="container topnav-inner">
+    <a href="../index.html" class="exp-logo" aria-label="EXP home">
+      <img src="../assets/exp-logo.png" alt="" width="46" height="27">
+      <span class="logo-word">EXP</span>
+    </a>
+    <button class="btn btn-icon btn-ghost topnav-mobile-toggle" aria-label="Toggle navigation" data-topnav-toggle style="display:inline-flex;">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M3 6h18M3 12h18M3 18h18"/>
+      </svg>
+    </button>
+    <nav class="topnav-links" aria-label="Primary" id="topnavLinks">
+      <a href="../index.html">Home</a>
+      <a href="../supplier/login.html">Suppliers</a>
+      <a href="index.html" class="is-active">Marketplace</a>
+      <a href="../admin/login.html">Admin</a>
+    </nav>
+  </div>
+</header>
+
+<section class="marketplace-header">
+  <div class="container marketplace-header-inner">
+    <h1>Discover Approved Suppliers</h1>
+    <p>Browse our curated network of verified suppliers and services</p>
+    <div class="search-container" style="width:100%; max-width:640px;">
+      <input type="search" id="searchInput" placeholder="Search suppliers, products, or services…" aria-label="Search suppliers">
+      <button class="btn btn-primary" id="searchBtn">Search</button>
+    </div>
+  </div>
+</section>
+
+<section class="filters-bar">
+  <div class="container">
+    <div class="filters-inner">
+      <div style="display:flex; gap:12px; align-items:center;">
+        <label for="sortSelect">Sort by:</label>
+        <select id="sortSelect" class="input" style="min-width:160px;">
+          <option>Newest approved</option>
+          <option>Name A–Z</option>
+          <option>Most products</option>
+        </select>
+      </div>
+    </div>
+    <div class="category-chips" id="categoryChips" style="margin-top:16px;">
+      <button class="category-chip is-active" data-cat="all">All categories</button>
+    </div>
+  </div>
+</section>
+
+<section class="container suppliers-section">
+  <div id="supplierGridWrap">
+    <div class="empty-state">
+      <div class="empty-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+      </div>
+      <h3>No suppliers found</h3>
+      <p>Try adjusting your search or category filters to find suppliers.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Image Modal -->
+<div class="image-modal" id="imageModal">
+  <div class="image-modal-content">
+    <img id="modalImage" src="" alt="Product image">
+    <button class="image-modal-close" id="closeImageModal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container site-footer-inner is-centered">
+    <p class="footer-quote">"Nothing ever becomes real until it is experienced" <cite>John Keats, 1819</cite></p>
+    <p class="muted" style="font-size:12.5px;">© <span data-year></span> EXP Agency</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/cache.js"></script>
+<script src="../js/app.js"></script>
+<script>
+  async function ensureCache() {
+    LoaderManager.show();
+    const data = await ExpCache.getApprovedSuppliers();
+    LoaderManager.hide();
+    return data;
+  }
+
+  document.getElementById("categoryChips").addEventListener("click", (e) => {
+    const chip = e.target.closest(".category-chip");
+    if (!chip) return;
+    document.querySelectorAll("#categoryChips .category-chip").forEach(c => c.classList.remove("is-active"));
+    chip.classList.add("is-active");
+    renderFiltered();
+  });
+
+  document.getElementById("searchBtn").addEventListener("click", renderFiltered);
+  document.getElementById("searchInput").addEventListener("input", () => {
+    clearTimeout(window._searchDebounce);
+    window._searchDebounce = setTimeout(renderFiltered, 250);
+  });
+  document.getElementById("searchInput").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") renderFiltered();
+  });
+  document.getElementById("sortSelect").addEventListener("change", renderFiltered);
+
+  async function loadCategories(suppliers) {
+    const catSet = new Set();
+    suppliers.forEach(s => { if (s.category) catSet.add(s.category); });
+    if (catSet.size === 0) return;
+    const container = document.getElementById("categoryChips");
+    container.innerHTML = `<button class="category-chip is-active" data-cat="all">All categories</button>
+      ${[...catSet].sort().map(c => `<button class="category-chip" data-cat="${c}">${c}</button>`).join("")}`;
+  }
+
+  async function renderFiltered() {
+    // Use the cache directly — no network call if already loaded
+    const cached = await ExpCache.getApprovedSuppliers();
+    const q = document.getElementById("searchInput").value.trim().toLowerCase();
+    const cat = document.querySelector("#categoryChips .category-chip.is-active")?.dataset.cat || "all";
+    const sort = document.getElementById("sortSelect").value;
+
+    let list = cached.slice();
+
+    if (cat !== "all") {
+      list = list.filter(s => s.category === cat);
+    }
+
+    if (q) {
+      list = list.filter(s =>
+        s.company_name?.toLowerCase().includes(q) ||
+        s.contact_name?.toLowerCase().includes(q) ||
+        s.about?.toLowerCase().includes(q) ||
+        (s.products || []).some(p => p.name?.toLowerCase().includes(q) || p.category?.toLowerCase().includes(q))
+      );
+    }
+
+    if (sort === "Name A–Z") list.sort((a, b) => (a.company_name || "").localeCompare(b.company_name || ""));
+    else if (sort === "Most products") list.sort((a, b) => (b.products?.length || 0) - (a.products?.length || 0));
+
+    renderSupplierGrid(list);
+  }
+
+  function renderSupplierGrid(suppliers) {
+    const wrap = document.getElementById("supplierGridWrap");
+    if (!suppliers.length) {
+      wrap.innerHTML = `<div class="empty-state">
+        <div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></div>
+        <h3>No suppliers found</h3><p>Try adjusting your search or filter to find suppliers.</p></div>`;
+      return;
+    }
+
+    wrap.innerHTML = `<div class="supplier-grid" id="supplierGrid"></div>`;
+    const grid = document.getElementById("supplierGrid");
+
+    for (const supplier of suppliers) {
+      const products = supplier.products || [];
+      const card = document.createElement("a");
+      card.href = `supplier-profile.html?id=${supplier.id}`;
+      card.className = "supplier-card";
+
+      const productGrid = products.length ? `
+        <div class="product-grid">
+          ${products.slice(0, 6).map(p => `
+            <div class="product-thumbnail" onclick="return handleImageClick(event,'${p.photo_url || ''}')">
+              <div class="product-thumbnail-img">
+                ${p.photo_url
+                  ? `<img src="${p.photo_url}" alt="${p.name}">`
+                  : `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M21 8 12 3 3 8l9 5 9-5Z"/><path d="M3 8v8l9 5 9-5V8"/></svg>`}
+              </div>
+              <div class="product-thumbnail-info">
+                <p class="product-thumbnail-name">${p.name || 'Product'}</p>
+                <p class="product-thumbnail-cat">${p.category || ''}</p>
+                ${p.price ? `<p style="font-size:12px;font-weight:700;color:var(--exp-red);margin:4px 0 0;">KES ${Number(p.price).toLocaleString()}</p>` : ''}
+              </div>
+            </div>`).join("")}
+        </div>` : '';
+
+      card.innerHTML = `
+        <div class="supplier-card-header">
+          <div class="supplier-card-logo">
+            ${(supplier.company_name || 'S').charAt(0).toUpperCase()}
+          </div>
+          <div style="flex:1; min-width:0;">
+            <h3>${supplier.company_name}</h3>
+            <p>${supplier.contact_name || ''}</p>
+          </div>
+        </div>
+        <div class="supplier-card-body">
+          <p>${supplier.about || 'No description yet'}</p>
+          ${productGrid}
+        </div>
+        <div class="supplier-card-footer">
+          <span class="pill pill-silver">${products.length} product${products.length !== 1 ? 's' : ''}</span>
+          ${supplier.category ? `<span class="pill pill-exp">${supplier.category}</span>` : ''}
+        </div>`;
+      grid.appendChild(card);
+    }
+  }
+
+  window.handleImageClick = function(event, imageUrl) {
+    event.stopPropagation();
+    event.preventDefault();
+    if (imageUrl) openImageModal(imageUrl);
+    return false;
+  };
+
+  const imageModal = document.getElementById('imageModal');
+  const modalImage = document.getElementById('modalImage');
+  document.getElementById('closeImageModal').addEventListener('click', closeImageModal);
+  imageModal.addEventListener('click', (e) => { if (e.target === imageModal) closeImageModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && imageModal.classList.contains('is-open')) closeImageModal(); });
+
+  function openImageModal(url) {
+    modalImage.src = url;
+    imageModal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeImageModal() {
+    imageModal.classList.remove('is-open');
+    document.body.style.overflow = 'auto';
+    modalImage.src = '';
+  }
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    const suppliers = await ensureCache();
+    await loadCategories(suppliers);
+    renderFiltered();
+  });
+
+  // Topnav scroll effect
+  var topnav = document.getElementById('topnav');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 8) topnav.classList.add('is-scrolled');
+    else topnav.classList.remove('is-scrolled');
+  }, { passive:true });
+</script>
+</body>
+</html>

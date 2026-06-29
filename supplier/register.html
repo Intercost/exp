@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Register | Supplier Portal | Exp Supplier Network</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.ico">
+<link rel="stylesheet" href="../css/styles.css">
+<style>
+  /* ---- Step animation ---- */
+  .reg-step{ display:none; }
+  .reg-step.is-active{ display:block; animation:reg-step-in .3s ease; }
+  @keyframes reg-step-in{ from{ opacity:0; transform:translateY(8px); } to{ opacity:1; transform:none; } }
+
+  /* ---- Step nav buttons ---- */
+  .step-nav{ display:flex; gap:10px; margin-top:24px; }
+  .step-nav .btn{ flex:1; }
+
+  /* ---- Review list ---- */
+  .review-list{ display:flex; flex-direction:column; }
+  .review-row{
+    display:flex; justify-content:space-between; align-items:flex-start; gap:16px;
+    padding:12px 0; border-bottom:1px solid var(--exp-line); font-size:13.5px;
+  }
+  .review-row:last-child{ border-bottom:0; }
+  .review-row dt{ color:var(--exp-silver); font-weight:700; flex-shrink:0; min-width:130px; }
+  .review-row dd{ margin:0; text-align:right; word-break:break-word; }
+  .review-empty{ color:var(--exp-silver); font-style:italic; }
+
+  /* ---- Subcategory reveal ---- */
+  .sub-reveal{ display:none; }
+  .sub-reveal.is-visible{ display:block; animation:reg-step-in .2s ease; }
+
+  /* ---- Category grid for pill selection ---- */
+  .cat-pill-group{ display:flex; flex-direction:column; gap:8px; }
+  .cat-pill{
+    border:1.5px solid var(--exp-silver-light); border-radius:var(--radius-sm);
+    padding:10px 14px; font-size:13px; font-weight:700; font-family:var(--font-display);
+    background:#fff; cursor:pointer; color:var(--exp-ink); text-align:left;
+    transition:border-color .12s, background .12s, color .12s;
+  }
+  .cat-pill:hover{ border-color:var(--exp-silver); }
+  .cat-pill.is-selected{ border-color:var(--exp-red); background:rgba(237,28,36,.06); color:var(--exp-red); }
+
+  /* ---- Step label hide on tiny screens ---- */
+  .step-track .step .step-label{ display:none; }
+  @media (min-width:480px){
+    .step-track .step .step-label{ display:inline; }
+  }
+
+  /* ---- Success state ---- */
+  .success-icon{
+    width:64px; height:64px; border-radius:50%; background:rgba(237,28,36,.08);
+    display:flex; align-items:center; justify-content:center; margin:0 auto 18px;
+    color:var(--exp-red);
+  }
+</style>
+</head>
+<body>
+
+<div style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:32px 16px; background:var(--exp-paper-dim);">
+  <div style="max-width:540px; width:100%;">
+
+    <!-- Header -->
+    <div style="text-align:center; margin-bottom:28px;">
+      <a href="../index.html" class="exp-logo" style="justify-content:center; margin-bottom:16px; display:inline-flex;">
+        <img src="../assets/exp-logo.png" alt="Exp" width="46" height="27">
+        <span class="logo-word">SUPPLIER&nbsp;NETWORK</span>
+      </a>
+      <h2 style="margin-top:6px;">Register as a Supplier</h2>
+      <p class="muted" style="margin-top:6px; font-size:13px;">Create your account in 3 steps. Approval required before you appear in the marketplace.</p>
+    </div>
+
+    <div class="panel panel-pad">
+
+      <!-- Step indicator -->
+      <div class="step-track" id="stepTrack" style="margin-bottom:28px;">
+        <div class="step is-active" data-step-indicator="1">
+          <span class="dot">1</span><span class="step-label">Business</span>
+        </div>
+        <span class="sep"></span>
+        <div class="step" data-step-indicator="2">
+          <span class="dot">2</span><span class="step-label">Account</span>
+        </div>
+        <span class="sep"></span>
+        <div class="step" data-step-indicator="3">
+          <span class="dot">3</span><span class="step-label">Review</span>
+        </div>
+      </div>
+
+      <form id="registerForm" novalidate>
+
+        <!-- ============================================================
+             STEP 1 — Business details + category
+        ============================================================ -->
+        <div class="reg-step is-active" data-step="1">
+          <div class="stack-sm">
+
+            <div class="input-group-row">
+              <div class="field">
+                <label for="companyName">Business Name</label>
+                <input type="text" id="companyName" class="input" placeholder="Your business name" required>
+              </div>
+              <div class="field">
+                <label for="contactName">Contact Person</label>
+                <input type="text" id="contactName" class="input" placeholder="Your full name" required>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="phone">Phone</label>
+              <input type="tel" id="phone" class="input" placeholder="+254…">
+            </div>
+
+            <div class="field">
+              <label for="location">Location <span class="muted" style="font-weight:400;">(City / Region)</span></label>
+              <input type="text" id="location" class="input" placeholder="e.g. Nairobi, Kenya" required>
+            </div>
+
+            <!-- Category select -->
+            <div class="field">
+              <label for="categorySelect">Category</label>
+              <select id="categorySelect" class="input" required>
+                <option value="">Select a category…</option>
+                <option value="Event Production &amp; Infrastructure">Event Production &amp; Infrastructure</option>
+                <option value="Branding, Print &amp; Merchandising">Branding, Print &amp; Merchandising</option>
+                <option value="Creative Production &amp; Media">Creative Production &amp; Media</option>
+                <option value="Logistics &amp; Field Operations">Logistics &amp; Field Operations</option>
+                <option value="Hospitality &amp; Catering">Hospitality &amp; Catering</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <!-- "Other" category free-text — shown only when Other is chosen -->
+            <div class="field sub-reveal" id="otherCategoryWrap">
+              <label for="otherCategory">Specify your category</label>
+              <input type="text" id="otherCategory" class="input" placeholder="e.g. Waste Management">
+            </div>
+
+            <!-- Subcategory — shown once a category is chosen -->
+            <div class="field sub-reveal" id="subcategoryWrap">
+              <label for="subcategorySelect">Subcategory</label>
+              <select id="subcategorySelect" class="input">
+                <option value="">Select a subcategory…</option>
+              </select>
+            </div>
+
+            <!-- "Other" subcategory free-text -->
+            <div class="field sub-reveal" id="otherSubcategoryWrap">
+              <label for="otherSubcategory">Specify your products / services</label>
+              <input type="text" id="otherSubcategory" class="input" placeholder="e.g. Eco-friendly packaging">
+            </div>
+
+          </div>
+
+          <div class="step-nav">
+            <button type="button" class="btn btn-primary btn-block" data-next>Continue →</button>
+          </div>
+        </div>
+
+        <!-- ============================================================
+             STEP 2 — Email + password
+        ============================================================ -->
+        <div class="reg-step" data-step="2">
+          <div class="stack-sm">
+            <div class="field">
+              <label for="email">Email</label>
+              <input type="email" id="email" class="input" placeholder="you@company.com" required>
+              <p class="error-msg" id="emailError">Enter a valid email address.</p>
+            </div>
+            <div class="field">
+              <label for="password">Password</label>
+              <div class="password-row">
+                <input type="password" id="password" class="input" placeholder="Minimum 8 characters" required minlength="8">
+                <button type="button" class="password-toggle" id="pwToggle">SHOW</button>
+              </div>
+              <p class="hint">Must be at least 8 characters.</p>
+            </div>
+            <div class="field">
+              <label for="confirmPassword">Confirm Password</label>
+              <div class="password-row">
+                <input type="password" id="confirmPassword" class="input" placeholder="Re-enter your password" required>
+                <button type="button" class="password-toggle" id="pwToggle2">SHOW</button>
+              </div>
+              <p class="error-msg" id="confirmError">Passwords do not match.</p>
+            </div>
+          </div>
+
+          <div class="step-nav">
+            <button type="button" class="btn btn-ghost" data-back>← Back</button>
+            <button type="button" class="btn btn-primary" data-next>Continue →</button>
+          </div>
+        </div>
+
+        <!-- ============================================================
+             STEP 3 — Review & submit
+        ============================================================ -->
+        <div class="reg-step" data-step="3">
+          <p class="muted" style="font-size:13px; margin-bottom:16px;">Please review your details before creating your account.</p>
+          <dl class="review-list" id="reviewList">
+            <div class="review-row"><dt>Business Name</dt><dd data-review="companyName">—</dd></div>
+            <div class="review-row"><dt>Contact Person</dt><dd data-review="contactName">—</dd></div>
+            <div class="review-row"><dt>Phone</dt><dd data-review="phone">—</dd></div>
+            <div class="review-row"><dt>Location</dt><dd data-review="location">—</dd></div>
+            <div class="review-row"><dt>Category</dt><dd data-review="category">—</dd></div>
+            <div class="review-row"><dt>Subcategory</dt><dd data-review="subcategory">—</dd></div>
+            <div class="review-row"><dt>Email</dt><dd data-review="email">—</dd></div>
+          </dl>
+
+          <!-- Error banner -->
+          <div id="submitError" style="display:none; margin-top:16px;" class="field has-error">
+            <p class="error-msg" style="display:block;" id="submitErrorMsg">Something went wrong.</p>
+          </div>
+
+          <div class="step-nav" style="margin-top:20px;">
+            <button type="button" class="btn btn-ghost" data-back>← Back</button>
+            <button type="submit" class="btn btn-primary" id="submitBtn">Create Account</button>
+          </div>
+        </div>
+
+      </form>
+
+      <!-- ============================================================
+           SUCCESS STATE (hidden until registration completes)
+      ============================================================ -->
+      <div id="successState" style="display:none; text-align:center; padding:16px 0;">
+        <div class="success-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <h3 style="font-size:20px; margin-bottom:8px;">Account Created!</h3>
+        <p class="muted" style="font-size:13.5px;">Your supplier account is pending approval. You'll be notified once the Exp team reviews your registration.</p>
+        <a href="login.html" class="btn btn-primary" style="margin-top:22px; display:inline-flex;">Go to Sign In</a>
+      </div>
+
+      <!-- Sign-in link -->
+      <div id="signinPrompt" style="margin-top:20px; text-align:center; font-size:13.5px;">
+        <span class="muted">Already have an account?</span>
+        <a href="login.html" style="margin-left:6px; font-weight:700; color:var(--exp-red); text-decoration:none;">Sign in →</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/app.js"></script>
+<script>
+(function () {
+
+  // =====================================================
+  // CATEGORY / SUBCATEGORY DATA
+  // =====================================================
+  var CATEGORIES = {
+    'Event Production & Infrastructure': [
+      'Venue', 'Sound & Audio', 'Lighting', 'Stage & Structures',
+      'Event Planning', 'Catering', 'Transport', 'Security', 'Other'
+    ],
+    'Branding, Print & Merchandising': [
+      'Logo Design', 'Brand Identity', 'Packaging', 'Print',
+      'Signage', 'Merchandise', 'Other'
+    ],
+    'Creative Production & Media': [
+      'Video Production', 'Photography', 'Animation',
+      'Content Creation', 'Copywriting', 'Social Media', 'Other'
+    ],
+    'Logistics & Field Operations': [
+      'Transport', 'Warehousing', 'Distribution',
+      'Courier', 'Storage', 'Handling', 'Other'
+    ],
+    'Hospitality & Catering': [
+      'Accommodation', 'Catering', 'Bar Services',
+      'Housekeeping', 'Concierge', 'Other'
+    ],
+    'Other': ['Other']
+  };
+
+  // =====================================================
+  // STEP WIZARD
+  // =====================================================
+  var steps      = [].slice.call(document.querySelectorAll('.reg-step'));
+  var indicators = [].slice.call(document.querySelectorAll('[data-step-indicator]'));
+  var current    = 1;
+
+  function goToStep(n) {
+    steps.forEach(function (el) {
+      el.classList.toggle('is-active', +el.dataset.step === n);
+    });
+    indicators.forEach(function (ind) {
+      var num = +ind.dataset.stepIndicator;
+      ind.classList.remove('is-active', 'is-done');
+      if (num === n) ind.classList.add('is-active');
+      else if (num < n) ind.classList.add('is-done');
+    });
+    if (n === 3) fillReview();
+    current = n;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // =====================================================
+  // CATEGORY / SUBCATEGORY DYNAMIC UI
+  // =====================================================
+  var categorySelect       = document.getElementById('categorySelect');
+  var subcategoryWrap      = document.getElementById('subcategoryWrap');
+  var subcategorySelect    = document.getElementById('subcategorySelect');
+  var otherCategoryWrap    = document.getElementById('otherCategoryWrap');
+  var otherCategoryInput   = document.getElementById('otherCategory');
+  var otherSubcategoryWrap = document.getElementById('otherSubcategoryWrap');
+  var otherSubcategoryInput= document.getElementById('otherSubcategory');
+
+  categorySelect.addEventListener('change', function () {
+    var val = this.value;
+
+    // Reset subcategory
+    subcategorySelect.innerHTML = '<option value="">Select a subcategory…</option>';
+    subcategorySelect.value = '';
+    otherSubcategoryInput.value = '';
+
+    // Show/hide other-category free text
+    otherCategoryWrap.classList.toggle('is-visible', val === 'Other');
+    if (val !== 'Other') otherCategoryInput.value = '';
+
+    if (!val) {
+      subcategoryWrap.classList.remove('is-visible');
+      otherSubcategoryWrap.classList.remove('is-visible');
+      return;
+    }
+
+    // Populate subcategories
+    var subs = CATEGORIES[val] || ['Other'];
+    subs.forEach(function (sub) {
+      var opt = document.createElement('option');
+      opt.value = sub;
+      opt.textContent = sub;
+      subcategorySelect.appendChild(opt);
+    });
+    subcategoryWrap.classList.add('is-visible');
+    otherSubcategoryWrap.classList.remove('is-visible');
+  });
+
+  subcategorySelect.addEventListener('change', function () {
+    otherSubcategoryWrap.classList.toggle('is-visible', this.value === 'Other');
+    if (this.value !== 'Other') otherSubcategoryInput.value = '';
+  });
+
+  // =====================================================
+  // HELPERS — get resolved category / subcategory
+  // =====================================================
+  function getCategory() {
+    var val = categorySelect.value;
+    if (val === 'Other') return otherCategoryInput.value.trim();
+    return val;
+  }
+
+  function getSubcategory() {
+    var val = subcategorySelect.value;
+    if (val === 'Other') return otherSubcategoryInput.value.trim();
+    return val;
+  }
+
+  // =====================================================
+  // STEP 1 VALIDATION
+  // =====================================================
+  function validateStep1() {
+    var fields = ['companyName', 'contactName', 'location'];
+    var allOk = true;
+
+    fields.forEach(function (id) {
+      var el = document.getElementById(id);
+      var wrap = el.closest('.field');
+      if (!el.value.trim()) {
+        wrap.classList.add('has-error');
+        allOk = false;
+      } else {
+        wrap.classList.remove('has-error');
+      }
+    });
+
+    if (!categorySelect.value) {
+      categorySelect.closest('.field').classList.add('has-error');
+      allOk = false;
+    } else {
+      categorySelect.closest('.field').classList.remove('has-error');
+    }
+
+    if (categorySelect.value === 'Other' && !otherCategoryInput.value.trim()) {
+      otherCategoryInput.closest('.field').classList.add('has-error');
+      allOk = false;
+    } else {
+      otherCategoryInput.closest('.field').classList.remove('has-error');
+    }
+
+    if (categorySelect.value && !subcategorySelect.value) {
+      subcategorySelect.closest('.field').classList.add('has-error');
+      allOk = false;
+    } else {
+      subcategorySelect.closest('.field').classList.remove('has-error');
+    }
+
+    if (subcategorySelect.value === 'Other' && !otherSubcategoryInput.value.trim()) {
+      otherSubcategoryInput.closest('.field').classList.add('has-error');
+      allOk = false;
+    } else {
+      otherSubcategoryInput.closest('.field').classList.remove('has-error');
+    }
+
+    return allOk;
+  }
+
+  // =====================================================
+  // STEP 2 VALIDATION
+  // =====================================================
+  function validateStep2() {
+    var email   = document.getElementById('email');
+    var pw      = document.getElementById('password');
+    var confirm = document.getElementById('confirmPassword');
+    var ok = true;
+
+    // Email
+    if (!email.value.trim() || !email.checkValidity()) {
+      email.closest('.field').classList.add('has-error');
+      ok = false;
+    } else {
+      email.closest('.field').classList.remove('has-error');
+    }
+
+    // Password length
+    if (pw.value.length < 8) {
+      pw.closest('.field').classList.add('has-error');
+      ok = false;
+    } else {
+      pw.closest('.field').classList.remove('has-error');
+    }
+
+    // Confirm match
+    if (confirm.value !== pw.value || !confirm.value) {
+      confirm.closest('.field').classList.add('has-error');
+      document.getElementById('confirmError').style.display = 'block';
+      ok = false;
+    } else {
+      confirm.closest('.field').classList.remove('has-error');
+      document.getElementById('confirmError').style.display = 'none';
+    }
+
+    return ok;
+  }
+
+  // =====================================================
+  // FILL REVIEW STEP
+  // =====================================================
+  function fillReview() {
+    var map = {
+      companyName:  document.getElementById('companyName').value.trim(),
+      contactName:  document.getElementById('contactName').value.trim(),
+      phone:        document.getElementById('phone').value.trim() || '—',
+      location:     document.getElementById('location').value.trim(),
+      category:     getCategory() || '—',
+      subcategory:  getSubcategory() || '—',
+      email:        document.getElementById('email').value.trim()
+    };
+    Object.keys(map).forEach(function (key) {
+      var el = document.querySelector('[data-review="' + key + '"]');
+      if (!el) return;
+      el.textContent = map[key] || '—';
+      el.classList.toggle('review-empty', !map[key] || map[key] === '—');
+    });
+  }
+
+  // =====================================================
+  // PASSWORD SHOW/HIDE
+  // =====================================================
+  function bindToggle(btnId, inputId) {
+    var btn   = document.getElementById(btnId);
+    var input = document.getElementById(inputId);
+    if (!btn || !input) return;
+    btn.addEventListener('click', function () {
+      var isPass = input.type === 'password';
+      input.type = isPass ? 'text' : 'password';
+      btn.textContent = isPass ? 'HIDE' : 'SHOW';
+    });
+  }
+  bindToggle('pwToggle',  'password');
+  bindToggle('pwToggle2', 'confirmPassword');
+
+  // =====================================================
+  // NEXT / BACK BUTTONS
+  // =====================================================
+  document.querySelectorAll('[data-next]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      if (current === 1 && !validateStep1()) return;
+      if (current === 2 && !validateStep2()) return;
+      goToStep(current + 1);
+    });
+  });
+
+  document.querySelectorAll('[data-back]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      goToStep(current - 1);
+    });
+  });
+
+  // =====================================================
+  // FORM SUBMIT
+  // =====================================================
+  document.getElementById('registerForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    var submitBtn  = document.getElementById('submitBtn');
+    var errorBanner= document.getElementById('submitError');
+    var errorMsg   = document.getElementById('submitErrorMsg');
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Creating account…';
+    errorBanner.style.display = 'none';
+
+    var payload = {
+      companyName: document.getElementById('companyName').value.trim(),
+      contactName: document.getElementById('contactName').value.trim(),
+      phone:       document.getElementById('phone').value.trim(),
+      location:    document.getElementById('location').value.trim(),
+      category:    getCategory(),
+      subcategory: getSubcategory(),
+      email:       document.getElementById('email').value.trim(),
+      password:    document.getElementById('password').value
+    };
+
+    var res = await ExpAPI.supplierRegister(payload);
+
+    if (res.ok) {
+      // Hide form, show success
+      document.getElementById('registerForm').style.display = 'none';
+      document.getElementById('stepTrack').style.display = 'none';
+      document.getElementById('signinPrompt').style.display = 'none';
+      document.getElementById('successState').style.display = 'block';
+    } else {
+      errorMsg.textContent = res.error || 'Something went wrong. Please try again.';
+      errorBanner.style.display = 'block';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Create Account';
+    }
+  });
+
+  // =====================================================
+  // REDIRECT IF ALREADY LOGGED IN
+  // =====================================================
+  document.addEventListener('DOMContentLoaded', function () {
+    var currentUser = ExpAPI.getCurrentUser();
+    if (currentUser && currentUser.type === 'supplier') {
+      window.location.href = 'dashboard.html';
+    }
+  });
+
+})();
+</script>
+
+<footer class="site-footer" style="position:fixed; bottom:0; left:0; right:0; background:#fff;">
+  <div class="container site-footer-inner is-centered">
+    <p class="footer-quote" style="margin:0;">"Nothing ever becomes real until it is experienced" <cite>— John Keats, 1819</cite></p>
+  </div>
+</footer>
+</body>
+</html>

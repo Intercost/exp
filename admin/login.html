@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Staff Sign In | Exp Supplier Network</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.ico">
+<link rel="stylesheet" href="../css/styles.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    margin: 0;
+    background: #f4f5f7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    font-family: var(--font-body, system-ui, sans-serif);
+  }
+
+  /* ── Brand strip at top ── */
+  .login-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 32px;
+    text-decoration: none;
+  }
+  .login-brand .logo-word {
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: .12em;
+    color: #888;
+    text-transform: uppercase;
+  }
+
+  /* ── Card ── */
+  .login-card {
+    width: 100%;
+    max-width: 420px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,.04), 0 20px 48px rgba(0,0,0,.10);
+    overflow: hidden;
+  }
+
+  /* Top colour band */
+  .login-card-band {
+    background: linear-gradient(130deg, #1c1c1e 0%, #2c2c2e 100%);
+    padding: 32px 32px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .login-card-band::before {
+    content: "";
+    position: absolute;
+    right: -40px; top: -40px;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, rgba(237,28,36,.35) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .login-card-band::after {
+    content: "";
+    position: absolute;
+    left: -20px; bottom: -30px;
+    width: 120px; height: 120px;
+    background: radial-gradient(circle, rgba(237,28,36,.12) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .login-card-band-inner {
+    position: relative; z-index: 1;
+  }
+  .login-card-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(237,28,36,.18);
+    border: 1px solid rgba(237,28,36,.35);
+    border-radius: 999px;
+    padding: 5px 12px;
+    margin-bottom: 18px;
+  }
+  .login-card-badge span {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #ff8a8e;
+  }
+  .login-card-badge .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #ED1C24;
+    flex-shrink: 0;
+  }
+  .login-card-band h1 {
+    color: #fff;
+    font-size: 26px;
+    font-weight: 800;
+    margin: 0 0 8px;
+    letter-spacing: -.3px;
+  }
+  .login-card-band p {
+    color: rgba(255,255,255,.55);
+    font-size: 13.5px;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Form body */
+  .login-card-body {
+    padding: 32px;
+  }
+
+  .field { display: flex; flex-direction: column; gap: 7px; margin-bottom: 20px; }
+  .field label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #555;
+  }
+  .password-row { position: relative; display: flex; align-items: center; }
+  .input {
+    width: 100%;
+    border: 1.5px solid #e0e0e5;
+    border-radius: 12px;
+    padding: 13px 16px;
+    font-size: 15px;
+    color: #1a1a1a;
+    background: #fafafa;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s, background .2s;
+    font-family: inherit;
+  }
+  .input:focus {
+    border-color: #ED1C24;
+    box-shadow: 0 0 0 3px rgba(237,28,36,.10);
+    background: #fff;
+  }
+  .password-toggle {
+    position: absolute;
+    right: 14px;
+    background: none;
+    border: none;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    color: #888;
+    cursor: pointer;
+    padding: 4px;
+    transition: color .15s;
+  }
+  .password-toggle:hover { color: #ED1C24; }
+
+  .btn-signin {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #ED1C24;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 24px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: .02em;
+    cursor: pointer;
+    transition: background .2s, transform .15s, box-shadow .2s;
+    font-family: inherit;
+    margin-top: 4px;
+  }
+  .btn-signin:hover:not(:disabled) {
+    background: #d41820;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(237,28,36,.28);
+  }
+  .btn-signin:active:not(:disabled) { transform: none; box-shadow: none; }
+  .btn-signin:disabled { opacity: .6; cursor: not-allowed; }
+
+  .login-divider {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 24px 0 20px;
+  }
+  .login-footer-link {
+    font-size: 13px;
+    color: #888;
+    text-align: center;
+  }
+  .login-footer-link a {
+    color: #1a1a1a;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color .15s;
+  }
+  .login-footer-link a:hover { color: #ED1C24; }
+</style>
+</head>
+<body>
+
+<a href="../index.html" class="login-brand">
+  <img src="../assets/exp-logo.png" alt="Exp" width="44" height="26">
+  <span class="logo-word">Supplier Network</span>
+</a>
+
+<div class="login-card">
+
+  <!-- Branded top band -->
+  <div class="login-card-band">
+    <div class="login-card-band-inner">
+      <div class="login-card-badge">
+        <span class="dot"></span>
+        <span>Staff portal</span>
+      </div>
+      <h1>Staff sign in</h1>
+      <p>Approve vendors, manage the queue, and review every supply line.</p>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div class="login-card-body">
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="password">Admin password</label>
+        <div class="password-row">
+          <input class="input" type="password" id="password" name="password" required placeholder="Enter admin password" autocomplete="current-password">
+          <button type="button" class="password-toggle" id="toggleBtn">SHOW</button>
+        </div>
+      </div>
+      <button type="submit" class="btn-signin" id="submitBtn">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        Sign in
+      </button>
+    </form>
+
+    <hr class="login-divider">
+    <p class="login-footer-link">Supplier account? <a href="../supplier/login.html">Go to supplier login &rarr;</a></p>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/app.js"></script>
+<script>
+  // Password toggle
+  const passwordInput = document.getElementById('password');
+  const toggleBtn = document.getElementById('toggleBtn');
+  toggleBtn.addEventListener('click', () => {
+    const isPassword = passwordInput.type === 'password';
+    passwordInput.type = isPassword ? 'text' : 'password';
+    toggleBtn.textContent = isPassword ? 'HIDE' : 'SHOW';
+  });
+
+  // Sign in
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    const password = passwordInput.value;
+    if (!password) {
+      window.expToast('Please enter the admin password.', 'error');
+      return;
+    }
+    btn.disabled = true;
+    btn.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9" opacity=".3"/><path d="M12 3a9 9 0 0 1 9 9" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur=".8s" repeatCount="indefinite"/></path></svg> Signing in&hellip;`;
+
+    const correctPassword = 'exp.admin';
+    if (password === correctPassword) {
+      localStorage.setItem('adminSession', 'true');
+      window.location.href = 'dashboard.html';
+    } else {
+      window.expToast('Incorrect password. Please try again.', 'error');
+      btn.disabled = false;
+      btn.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Sign in`;
+    }
+  });
+</script>
+</body>
+</html>

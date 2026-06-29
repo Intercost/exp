@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Documents | Supplier Portal | Exp Supplier Network</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.ico">
+<link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+
+<div class="brand-rail" aria-hidden="true"></div>
+<div class="sidebar-scrim"></div>
+
+<aside class="dash-sidebar">
+  <div class="dash-sidebar-head">
+    <a href="../index.html" class="exp-logo">
+      <img src="../assets/exp-logo.png" alt="Exp" width="38" height="22">
+      <span class="logo-word" style="font-size:13px;">SUPPLIER&nbsp;NETWORK</span>
+    </a>
+  </div>
+  <nav class="dash-nav" aria-label="Supplier portal navigation">
+    <div class="dash-nav-label">Supplier portal</div>
+    <a href="dashboard.html">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+      Dashboard
+    </a>
+    <a href="products.html">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 8 12 3 3 8l9 5 9-5Z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>
+      My products
+    </a>
+    <a href="categories.html">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+      My categories
+    </a>
+    <a href="documents.html" class="is-active">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+      Documents
+    </a>
+    <div class="dash-nav-label">Account</div>
+    <a href="profile.html">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+      Company profile
+    </a>
+  </nav>
+  <div class="dash-sidebar-foot">
+    <a href="../index.html" style="margin-bottom:12px; display:block; text-align:center; color:var(--text-muted); font-size:13px; text-decoration:none;">
+      ← Back to home
+    </a>
+    <a href="#" id="signOutLink">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+      Sign out
+    </a>
+  </div>
+</aside>
+
+<div class="dash-main">
+  <header class="dash-topbar">
+    <div style="display:flex; align-items:center; gap:14px;">
+      <button class="btn btn-icon btn-ghost sidebar-toggle" data-sidebar-toggle aria-label="Open menu">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <h1 class="dash-topbar-title">Documents</h1>
+    </div>
+  </header>
+
+  <div class="dash-content">
+    <div class="panel" style="margin-bottom:24px;">
+      <div class="panel-pad">
+        <div class="dropzone">
+          <div class="dropzone-icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+          </div>
+          <p style="font-weight:700; font-family:var(--font-display); font-size:14px;">Drop files here, or click to browse</p>
+          <p class="muted" style="font-size:12.5px; margin-top:4px;">PDF, JPG or PNG. Max 10MB per file.</p>
+          <input type="file" id="docInput" class="visually-hidden" accept=".pdf,.jpg,.jpeg,.png" multiple>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Required documents</h2>
+      </div>
+      <div class="panel-body">
+        <div class="stack-sm" id="requiredDocsList">
+          <div class="doc-row">
+            <div class="doc-ico">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+            </div>
+            <div class="doc-meta">
+              <div class="doc-name">Business registration / CIPC certificate</div>
+              <div class="doc-sub">Not uploaded yet</div>
+            </div>
+            <span class="pill pill-pending">Required</span>
+          </div>
+          <div class="doc-row">
+            <div class="doc-ico">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+            </div>
+            <div class="doc-meta">
+              <div class="doc-name">Tax clearance certificate</div>
+              <div class="doc-sub">Not uploaded yet</div>
+            </div>
+            <span class="pill pill-pending">Required</span>
+          </div>
+          <div class="doc-row">
+            <div class="doc-ico">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+            </div>
+            <div class="doc-meta">
+              <div class="doc-name">B-BBEE certificate / sworn affidavit</div>
+              <div class="doc-sub">Not uploaded yet</div>
+            </div>
+            <span class="pill pill-silver">Optional</span>
+          </div>
+          <div class="doc-row">
+            <div class="doc-ico">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+            </div>
+            <div class="doc-meta">
+              <div class="doc-name">Banking confirmation letter</div>
+              <div class="doc-sub">Not uploaded yet</div>
+            </div>
+            <span class="pill pill-pending">Required</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:24px;">
+      <div class="panel-head"><h2>Uploaded files</h2></div>
+      <div id="uploadedDocsWrap">
+        <div class="empty-state" style="padding:44px 24px;">
+          <div class="empty-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+          </div>
+          <h3>No files uploaded yet</h3>
+          <p>Files you add above will appear here with a review status once they sync to your compliance file.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/app.js"></script>
+<script>
+  // Check if user is logged in
+  document.addEventListener('DOMContentLoaded', async () => {
+    const currentUser = ExpAPI.getCurrentUser();
+    if (!currentUser || currentUser.type !== 'supplier') {
+      window.location.href = 'login.html';
+      return;
+    }
+
+    // Sign out handler
+    document.getElementById('signOutLink').addEventListener('click', (e) => {
+      e.preventDefault();
+      ExpAPI.logout();
+      window.location.href = 'login.html';
+    });
+
+    // Load uploaded documents
+    await loadDocuments();
+  });
+
+  // Function to load and render uploaded documents
+  async function loadDocuments() {
+    const uploadedDocsWrap = document.getElementById('uploadedDocsWrap');
+    const res = await ExpAPI.listMyDocuments();
+    if (!res.ok) {
+      uploadedDocsWrap.innerHTML = `
+        <div class="empty-state" style="padding:44px 24px;">
+          <div class="empty-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+          </div>
+          <h3>Error loading documents</h3>
+          <p class="muted">${res.error}</p>
+        </div>
+      `;
+      return;
+    }
+
+    const docs = res.data;
+    if (docs.length === 0) {
+      uploadedDocsWrap.innerHTML = `
+        <div class="empty-state" style="padding:44px 24px;">
+          <div class="empty-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+          </div>
+          <h3>No files uploaded yet</h3>
+          <p>Files you add above will appear here with a review status once they sync to your compliance file.</p>
+        </div>
+      `;
+      return;
+    }
+
+    // Render uploaded documents
+    uploadedDocsWrap.innerHTML = `
+      <div class="panel-body">
+        <div class="stack-sm" id="uploadedDocsList">
+        </div>
+      </div>
+    `;
+
+    const uploadedDocsList = document.getElementById('uploadedDocsList');
+    docs.forEach(doc => {
+      const row = document.createElement('div');
+      row.className = 'doc-row';
+      row.innerHTML = `
+        <div class="doc-ico">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+        </div>
+        <div class="doc-meta">
+          <div class="doc-name">${doc.name}</div>
+          <div class="doc-sub">Uploaded ${new Date(doc.uploaded_at).toLocaleDateString()}</div>
+        </div>
+        <button class="btn btn-silver btn-xs" data-delete-document="${doc.id}">Delete</button>
+      `;
+      uploadedDocsList.appendChild(row);
+    });
+
+    // Add delete handlers
+    document.querySelectorAll('[data-delete-document]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const docId = btn.getAttribute('data-delete-document');
+        if (confirm('Are you sure you want to delete this document?')) {
+          const deleteRes = await ExpAPI.deleteDocument(docId);
+          if (deleteRes.ok) {
+            window.expToast('Document deleted.', 'success');
+            await loadDocuments();
+          } else {
+            window.expToast(deleteRes.error || 'Error deleting document.', 'error');
+          }
+        }
+      });
+    });
+  }
+
+  // Document upload handler
+  document.getElementById("docInput").addEventListener("change", async (e) => {
+    const files = [...e.target.files];
+    if (!files.length) return;
+    for (const file of files) {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await ExpAPI.uploadDocument(fd);
+      if (!res.ok && !ExpAPI.isBackendReady()) {
+        window.expToast(`"${file.name}" is ready to upload. It will sync once the backend is connected.`, "default");
+      } else if (!res.ok) {
+        window.expToast(res.error || `Couldn't upload "${file.name}".`, "error");
+      } else {
+        window.expToast(`"${file.name}" uploaded.`, "success");
+        await loadDocuments();
+      }
+    }
+    e.target.value = "";
+  });
+</script>
+</body>
+</html>
