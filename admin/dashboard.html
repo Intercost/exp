@@ -203,9 +203,9 @@
       const palette = ['#ED1C24','#F59E0B','#10B981','#3B82F6','#7C3AED','#F43F5E','#06B6D4','#84CC16'];
       const pcWrap = document.getElementById('prodCatWrap');
       pcWrap.innerHTML = '';
-      const cv = document.getElementById('prodCatChart');
+      const cv = document.createElement('canvas');
+      cv.id = 'prodCatChart';
       pcWrap.appendChild(cv);
-      cv.style.display = 'block';
       new Chart(cv, {
         type: 'bar',
         data: { labels, datasets: [{ data: values, backgroundColor: labels.map((_, i) => palette[i % palette.length]), borderRadius: 6, borderSkipped: false }] },
